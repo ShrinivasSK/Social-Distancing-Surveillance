@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Calibrate</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="heading_main">Calibration</h1>
+    </header>
+    <div class="mainPage">
+      <div class="section">
+        <h2>Camera Calibration</h2>
+        <div id="noFeed-camera" class="noFeed-camera">
+          <h2 class="noFeedText-camera">
+            Camera Calibration Complete
+          </h2>
+        </div>
+        <img class="feed" id="feed-cam" src="{{ url_for('video_feed') }}" />
+        <p>
+          Bring the checker-board pattern in front of the camera and press the
+          start button. Wait for the green tick to appear to proceed towards
+          Pose Calibration
+        </p>
+        <div class="start-button" id="camera-start">
+          <button>Start Calibration</button>
+          <i class="fas fa-check-circle" id="camera-tick"></i>
+        </div>
+      </div>
+      <div class="section">
+        <h2>Pose Calibration</h2>
+        <div id="noFeed-pose" class="noFeed-pose">
+          <h2 class="noFeedText-pose" id="poseNotDone">
+            Complete Camera Calibration <br />First
+          </h2>
+          <h2 class="noFeedText-pose" id="poseDone">
+            Pose Calibration Complete
+          </h2>
+        </div>
+        <img class="feed" id="feed-pose" src="{{ url_for('video_feed') }}" />
+        <p>
+          Now stick the supplied aruco tags on the floor in front of the camera
+          and click on Start. Click on Edit to change the values. Finally click
+          on Submit.
+        </p>
+        <div class="start-button" id="pose-start">
+          <button>Start Calibration</button>
+          <i class="fas fa-check-circle" id="pose-tick"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="form-container" id="form-container">
+      <h3>Calcluated Pose of the Camera</h3>
+
+      <form class="form" id="form">
+        <div class="form-section">
+          <h4>Dimensions for marker</h4>
+          <label for="length">Length</label><br />
+          <input type="text" id="length" name="length" /><br />
+          <label for="width">Width</label><br />
+          <input type="text" id="width" name="width" /><br />
+        </div>
+
+        <div class="form-section">
+          <h4>About the Camera</h4>
+          <label for="height">Height of Camera</label><br />
+          <input type="text" id="height" name="height" /><br />
+          <label for="distance">Distance from Marker</label><br />
+          <input type="text" id="distance" name="distance" /><br />
+        </div>
+
+        <div class="form-section">
+          <h4>Orientation of the Camera</h4>
+          <label for="yoke">Yoke</label><br />
+          <input type="text" id="yoke" name="yoke" /><br />
+          <label for="pitch">Pitch</label><br />
+          <input type="text" id="pitch" name="pitch" /><br />
+          <label for="roll">Roll</label><br />
+          <input type="text" id="roll" name="roll" />
+        </div>
+      </form>
+
+      <div class="button-container">
+        <button class="button pose-edit" id="pose-edit">Edit</button>
+        <button class="button pose-submit" id="pose-confirm">Confirm</button>
+      </div>
+    </div>
+  </body>
+
+  <script
+    type="text/javascript"
+    src="{{ url_for('static', filename='calibrate.js') }}"
+  ></script>
+</html>
