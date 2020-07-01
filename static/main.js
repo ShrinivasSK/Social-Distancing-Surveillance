@@ -1,79 +1,89 @@
-var buttonRecord = document.getElementById("record");
-var buttonStop = document.getElementById("recordStop");
+//get the required html DOM elements as objects
 var buttonStreamStop = document.getElementById("streamStop");
 var buttonStreamPlay = document.getElementById("streamPlay");
-var buttonTop = document.getElementById("topView");
-var buttonCamera = document.getElementById("cameraView");
-var noFeed=document.getElementById('noFeed');
+var buttonEditThresh = document.getElementById("thresh");
+var buttonReCalib = document.getElementById("recalib");
+
+var noFeed = document.getElementById("noFeed");
 var mainScreen = document.getElementById("mainFeed");
 
-buttonStop.disabled = true;
+var toggleAuto = document.getElementById("toggle-auto");
+
+var minDistForm = document.getElementById("min-dist");
+
+//disable editing in the min-distance threshold input
+minDistForm.elements[0].disabled = true;
+//default min physical distance in meter
+minDistForm.elements[0].value = "1";
+
+//streaming controls
 buttonStreamPlay.disabled = true;
-noFeed.hidden=true;
+noFeed.hidden = true;
 
-buttonCamera.onclick = function () {
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/change-view");
-  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhr.send(JSON.stringify({ action: "Camera_View" }));
+//variable to check whether auto recalibration is on or off
+var is_auto = toggleAuto.checked;
+
+//switch to toggle is_auto
+toggleAuto.onchange = function () {
+  is_auto = !is_auto;
+  //send the server information about the change
+  if (is_auto) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/recalib");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({ action: "auto-calib" }));
+  } else {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/recalib");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({ action: "manual-calib" }));
+  }
 };
 
-buttonTop.onclick = function () {
+//ask the server to recalibrate the system now
+buttonReCalib.onclick = function () {
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/change-view");
+  xhr.open("POST", "/recalib");
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhr.send(JSON.stringify({ action: "Top_View" }));
+  xhr.send(JSON.stringify({ action: "calib-now" }));
 };
 
-//show the main screen
+
+//show the streaming
 buttonStreamPlay.onclick = function () {
   buttonStreamPlay.disabled = true;
   buttonStreamStop.disabled = false;
 
   mainScreen.hidden = false;
-  noFeed.hidden=true;
-
+  noFeed.hidden = true;
 };
 
-//hide the main screen
+//hide the streaming
 buttonStreamStop.onclick = function () {
   buttonStreamStop.disabled = true;
   buttonStreamPlay.disabled = false;
 
   mainScreen.hidden = true;
-  noFeed.hidden=false;
+  noFeed.hidden = false;
 };
 
-buttonRecord.onclick = function () {
-  buttonRecord.disabled = true;
-  buttonStop.disabled = false;
+//set the minimum threshold distance
+buttonEditThresh.onclick = function () {
+  if (buttonEditThresh.textContent == "Edit") {
+    minDistForm.elements[0].disabled = false;
+    buttonEditThresh.textContent = "Confirm";
+  } else {
+    //when confirmed send the server the required information
+    minDistForm.elements[0].disabled = true;
+    buttonEditThresh.textContent = "Edit";
 
-  // disable download link
-  var downloadLink = document.getElementById("download");
-  downloadLink.text = "";
-  downloadLink.href = "";
+    var data = {
+      "min-dist": minDistForm.elements[0].value,
+    };  
 
-  // XMLHttpRequest
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "/record_status");
-  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhr.send(JSON.stringify({ status: "true" }));
-};
-
-buttonStop.onclick = function () {
-  buttonRecord.disabled = false;
-  buttonStop.disabled = true;
-
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      // enable download link
-      var downloadLink = document.getElementById("download");
-      downloadLink.text = "Download";
-      downloadLink.href = "/static/video.avi";
-    }
-  };
-  xhr.open("POST", "/record_status");
-  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xhr.send(JSON.stringify({ status: "false" }));
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/min-dist");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(data));
+  }
 };

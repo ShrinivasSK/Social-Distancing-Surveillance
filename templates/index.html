@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="{{ url_for('static',filename='style.css') }}"
+      href="{{ url_for('static',filename='index.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='toggle-switch.css') }}"
+    />
+    <!-- to work without server -->
+    <!-- <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
+    <link rel="stylesheet" type="text/css" href="../static/style.css" /> -->
     <title>Social Distancing Surveillance</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
@@ -17,20 +24,30 @@
     <header class="header">
       <h1 class="heading_main">Social Distancing Surveillance</h1>
     </header>
+    <!-- Main Screen -->
     <div class="main_screen">
       <div class="noFeed" id="noFeed">
         <h2 class="noFeedText">Streaming Stopped</h2>
       </div>
       <img class="video_feed" src="{{ url_for('video_feed') }}" id="mainFeed" />
+      <!-- Button Panel -->
       <div class="buttons_panel">
         <div class="button_section">
-          <h3 class="button_section_text">Record the feed</h3>
+          <!-- Recalibration -->
+          <h3 class="button_section_text">Recalibration</h3>
           <div class="button_container">
-            <button class="button" id="record">Record</button>
-            <button class="button" id="recordStop">Stop</button>
+            <div class="auto-calib">
+              <h4 class="button-text">Auto</h4>
+              <label class="switch">
+                <input class="switch-input" type="checkbox" id="toggle-auto" />
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </div>
+            <button class="button button-now" id="recalib">Now</button>
           </div>
-          <a id="download"></a>
         </div>
+        <!-- Control Feed -->
         <div class="button_section">
           <h3 class="button_section_text">Control the feed</h3>
           <div class="button_container">
@@ -38,23 +55,28 @@
             <button class="button" id="streamStop">Stop</button>
           </div>
         </div>
+        <!-- Min Physical Distance -->
         <div class="button_section">
-          <h3 class="button_section_text">Change the view</h3>
+          <h3 class="button_section_text text-change">
+            Minimum Physical Distance
+          </h3>
           <div class="button_container">
-            <button class="button" id="topView">Top</button>
-            <button class="button" id="cameraView">Camera</button>
+            <form class="min-dist" id="min-dist">
+              <input type="text" id="dist" name="dist" />
+              <label for="dist">(in m)</label>
+            </form>
+            <button class="button" id="thresh">Edit</button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Lower half -->
-
     <div class="bottom">
+      <!-- Calibrate Page Link-->
       <div class="calibrate">
         <div class="bottom_section_heading-1">
           <h3>First time here?</h3>
-          <!-- <h4 class="calibrate_heading-2">Or facing some issues</h4> -->
         </div>
 
         <div class="text_part">
@@ -67,6 +89,7 @@
           >
         </div>
       </div>
+      <!-- Manual Page Link-->
       <div class="manual">
         <div class="bottom_section_heading-2">
           <h3>Stuck Somewhere?</h3>
@@ -86,4 +109,6 @@
     type="text/javascript"
     src="{{ url_for('static', filename='main.js') }}"
   ></script>
+  <!-- to work without server -->
+  <!-- <script type="text/javascript" src="../static/main.js"></script> -->
 </html>
