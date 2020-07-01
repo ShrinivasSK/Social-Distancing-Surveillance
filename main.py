@@ -14,7 +14,6 @@ calib_now = False
 marker_length = 7.2
 calib_start = False
 
-
 @app.route('/')
 # Main page Rendering
 def index():

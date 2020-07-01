@@ -8,7 +8,6 @@ aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
 # ARUCO Board used for finding Intrinstics
 aruco_board = aruco.GridBoard_create(5, 7, 2.3, 0.5, aruco_dict)
 
-
 class CameraCalibration:
 
     def __init__(self):

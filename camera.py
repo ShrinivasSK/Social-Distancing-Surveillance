@@ -7,7 +7,6 @@ from cameraCalib import CameraCalibration
 
 global_frame = None
 
-
 class VideoCamera(object):
     def __init__(self):
         self.cap = cv2.VideoCapture(0)

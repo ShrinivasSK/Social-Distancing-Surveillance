@@ -44,6 +44,7 @@ buttonMarkerConfirm.onclick = function () {
   xhr.open("POST", "/marker-dimension");
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify(data));
+  
 };
 
 //enable editing in form

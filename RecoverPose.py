@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 
-
 class recoverPose():
 
     def __init__(self, cameraMatrix):

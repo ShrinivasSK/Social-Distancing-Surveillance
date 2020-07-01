@@ -25,6 +25,7 @@ var is_auto = toggleAuto.checked;
 
 //switch to toggle is_auto
 toggleAuto.onchange = function () {
+  
   is_auto = !is_auto;
   //send the server information about the change
   if (is_auto) {
