@@ -32,6 +32,7 @@ class CameraCalibration:
         self.calibData = {}
 
         self.checkIntrinstics()
+        self.checkCalibration()
 
     def checkIntrinstics(self):
         try:
@@ -45,6 +46,28 @@ class CameraCalibration:
         except:
             print("Error opening intrinsicsData.yaml")
             self.intrinsticDone = 0
+
+    def checkCalibration(self):
+        try:
+            with open('calibrationData.yaml') as f:
+                loadedData = yaml.load(f)
+            self.aruco_corners = loadedData.get('aruco_corners')
+            self.aruco_ids = loadedData.get('aruco_ids')
+            self.aruco_rvecs = loadedData.get('aruco_rvecs')
+            self.aruco_tvecs = loadedData.get('aruco_tvecs')
+            self.arucoLength = loadedData.get('aruco_length')
+            self.topViewTransform = loadedData.get('topViewTransform')
+            self.worldRatio = loadedData.get('worldRatio')
+
+            self.aruco_corners = np.array(self.aruco_corners)
+            self.aruco_ids = np.array(self.aruco_ids)
+            self.aruco_rvecs = np.array(self.aruco_rvecs)
+            self.aruco_tvecs = np.array(self.aruco_tvecs)
+            self.topViewTransform = np.array(self.topViewTransform)
+            self.calibrationDone = 1
+        except:
+            print("Error opening calibrationData.yaml")
+            self.calibrationDone = 0
 
     def detectMarkers(self, img):
         corners, ids, _ = cv2.aruco.detectMarkers(img, aruco_dict)
@@ -248,12 +271,23 @@ class CameraCalibration:
         # find camera Pose and save in yaml file
         self.calibData = {'height': str(np.asarray(np.abs(cameraPosition[2]) * 100).tolist()[0][0]),
                           'distance': str(np.asarray(np.abs(cameraPosition[1]) * 100).tolist()[0][0]),
-                          'yoke': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
+                          'yaw': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
                           'pitch': str(np.asarray((self.aruco_rvecs[0][0][1] * 180) / np.pi).tolist()),
                           'roll': str(np.asarray((self.aruco_rvecs[0][0][0] * 180) / np.pi).tolist())}
+
+        calibrationData = {
+            'aruco_corners': np.asarray(self.aruco_corners).tolist(),
+            'aruco_ids': np.asarray(self.aruco_ids).tolist(),
+            'aruco_rvecs': np.asarray(self.aruco_rvecs).tolist(),
+            'aruco_tvecs': np.asarray(self.aruco_tvecs).tolist(),
+            'aruco_length': self.arucoLength,
+            'worldRatio': self.worldRatio,
+            'topViewTransform': np.asarray(self.topViewTransform).tolist()
+        }
+
         try:
             with open("calibrationData.yaml", "w") as f:
-                yaml.dump(self.calibData, f)
+                yaml.dump(calibrationData, f)
         except:
             print("ERROR creating calibrationData.yaml file")
             return 0
@@ -280,11 +314,28 @@ class CameraCalibration:
         # find camera Pose and send it to HTML page
         self.calibData = {'height': str(np.asarray(np.abs(cameraPosition[2]) * 100).tolist()[0][0]),
                           'distance': str(np.asarray(np.abs(cameraPosition[1]) * 100).tolist()[0][0]),
-                          'yoke': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
+                          'yaw': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
                           'pitch': str(np.asarray((self.aruco_rvecs[0][0][1] * 180) / np.pi).tolist()),
                           'roll': str(np.asarray((self.aruco_rvecs[0][0][0] * 180) / np.pi).tolist())}
 
         ##########################################################################
+
+        calibrationData = {
+            'aruco_corners': np.asarray(self.aruco_corners).tolist(),
+            'aruco_ids': np.asarray(self.aruco_ids).tolist(),
+            'aruco_rvecs': np.asarray(self.aruco_rvecs).tolist(),
+            'aruco_tvecs': np.asarray(self.aruco_tvecs).tolist(),
+            'aruco_length': self.arucoLength,
+            'worldRatio': self.worldRatio,
+            'topViewTransform': np.asarray(self.topViewTransform).tolist()
+        }
+
+        try:
+            with open("calibrationData.yaml", "w") as f:
+                yaml.dump(calibrationData, f)
+        except:
+            print("ERROR creating calibrationData.yaml file")
+            return 0
 
         if (self.worldRatio != 0):
             self.calibrationDone = 1

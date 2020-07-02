@@ -61,7 +61,7 @@ buttonPoseSubmit.onclick = function () {
   var data = {
     height: form.elements[0].value,
     distance: form.elements[1].value,
-    yoke: form.elements[2].value,
+    yaw: form.elements[2].value,
     pitch: form.elements[3].value,
     roll: form.elements[4].value,
   };
@@ -85,7 +85,7 @@ buttonCalibStart.onclick = function () {
       data = JSON.parse(xhr.response);
       form.elements[0].value = data["height"];
       form.elements[1].value = data["distance"];
-      form.elements[2].value = data["yoke"];
+      form.elements[2].value = data["yaw"];
       form.elements[3].value = data["pitch"];
       form.elements[4].value = data["roll"];
 

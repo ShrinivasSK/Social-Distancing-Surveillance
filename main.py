@@ -52,12 +52,44 @@ def video_stream():
                    b'Content-Type: image/jpeg\r\n\r\n' + global_frame + b'\r\n\r\n')
 
 
+def video_stream_calib():
+    # basic function to use the VideoCamera object in camera.py
+    # to get a frame in req format and stream it
+    global video_camera
+    global global_frame
+
+    if video_camera == None:
+        video_camera = VideoCamera()
+
+    while True:
+        # returns frame in required format
+        frame = video_camera.get_frame_calib()
+
+        # frame streaming part
+        if frame != None:
+            global_frame = frame
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        else:
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + global_frame + b'\r\n\r\n')
+
+
 @app.route('/video_feed')
 # This is the video streaming Route. Used in src attribute of image tag in HTML
 # To stream the video
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
     return Response(video_stream(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+@app.route('/video_feed_calib')
+# This is the video streaming Route. Used in src attribute of image tag in HTML
+# To stream the video
+def video_feed_calib():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(video_stream_calib(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 

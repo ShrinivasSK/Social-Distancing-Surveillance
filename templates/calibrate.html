@@ -76,7 +76,7 @@
             Camera Calibration
           </h3>
           <div class="main-screen">
-            <img class="feed" id="feed-cam" src="{{ url_for('video_feed') }}" />
+            <img class="feed" id="feed-cam" src="{{ url_for('video_feed_calib') }}" />
 
             <div class="start-button">
               <button id="start-calib">Start Calibration</button>
@@ -118,9 +118,9 @@
                 <table>
                   <tr>
                     <td>
-                      <label for="yoke">Yoke</label>
+                      <label for="yaw">Yaw</label>
                     </td>
-                    <td><input type="text" id="yoke" name="yoke" /></td>
+                    <td><input type="text" id="yaw" name="yaw" /></td>
                   </tr>
                   <tr>
                     <td>
