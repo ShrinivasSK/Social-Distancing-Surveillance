@@ -14,6 +14,7 @@ calib_now = False
 marker_length = 7.2
 calib_start = False
 
+
 @app.route('/')
 # Main page Rendering
 def index():
@@ -61,11 +62,13 @@ def video_feed():
 
 
 @app.route('/min-dist', methods=['POST'])
-def min_dist():
+def get_min_dist():
+    print(video_camera.min_dist)
     json = request.get_json()
-    min_dist = json['min-dist']
+    video_camera.min_dist = json['min-dist']
+    print(video_camera.min_dist)
     with open('min_dist.txt', 'w') as file:
-        file.write(min_dist)
+        file.write(video_camera.min_dist)
     return jsonify(result="done")
 
 

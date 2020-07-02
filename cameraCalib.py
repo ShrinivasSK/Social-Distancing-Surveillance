@@ -8,6 +8,7 @@ aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
 # ARUCO Board used for finding Intrinstics
 aruco_board = aruco.GridBoard_create(5, 7, 2.3, 0.5, aruco_dict)
 
+
 class CameraCalibration:
 
     def __init__(self):
@@ -168,10 +169,9 @@ class CameraCalibration:
         self.worldRatio = 0.0
         self.calibrate(img, arucoLength)
 
-    def updateCalibration(self, img, newRvec, newTvec):
+    def updateCalibration(self, img, newRMat, newTvec):
         cameraMatrixInverse = np.linalg.inv(self.cameraMatrix)
-        rvecMat = np.zeros((3, 3))
-        cv2.Rodrigues(newRvec, rvecMat)
+        rvecMat = newRMat
 
         newTransform = np.zeros((4, 4))
         for i in range(0, 3):
@@ -179,8 +179,8 @@ class CameraCalibration:
                 newTransform[i][j] = rvecMat[i][j]
         newTransform[3][3] = 1
         newTransform[0][3] = newTvec[0][0]
-        newTransform[1][3] = newTvec[0][1]
-        newTransform[2][3] = newTvec[0][2]
+        newTransform[1][3] = newTvec[1][0]
+        newTransform[2][3] = newTvec[2][0]
 
         for i in range(0, 4):
             arucoCorner = np.zeros((3, 1))
@@ -215,23 +215,26 @@ class CameraCalibration:
             temp[2][0] = 1
 
             cornerInTopView = self.topViewTransform.dot(temp)
-            corner = np.array((1, 2))
+            print(cornerInTopView)
+            corner = np.zeros((1, 2))
             corner[0][0] = cornerInTopView[0][0]
             corner[0][1] = cornerInTopView[1][0]
             arucoCornersInTopView.append(corner)
 
         arucoCornersInTopView = np.array(arucoCornersInTopView)
 
-        arucoArea = (0.5) * (((arucoCornersInTopView[0][0][0][0] * arucoCornersInTopView[0][0][1][1])
-                              + (arucoCornersInTopView[0][0][1][0]
-                                 * arucoCornersInTopView[0][0][2][1])
-                              + (arucoCornersInTopView[0][0][2][0]
-                                 * arucoCornersInTopView[0][0][3][1])
-                              + (arucoCornersInTopView[0][0][3][0] * arucoCornersInTopView[0][0][0][1]))
-                             - ((arucoCornersInTopView[0][0][1][0] * arucoCornersInTopView[0][0][0][1])
-                                + (arucoCornersInTopView[0][0][2][0] * arucoCornersInTopView[0][0][1][1])
-                                + (arucoCornersInTopView[0][0][3][0] * arucoCornersInTopView[0][0][2][1])
-                                + (arucoCornersInTopView[0][0][0][0] * arucoCornersInTopView[0][0][3][1])))
+        arucoArea = (0.5) * (((arucoCornersInTopView[0][0][0] * arucoCornersInTopView[1][0][1])
+                              + (arucoCornersInTopView[1][0][0]
+                                 * arucoCornersInTopView[2][0][1])
+                              + (arucoCornersInTopView[2][0][0]
+                                 * arucoCornersInTopView[3][0][1])
+                              + (arucoCornersInTopView[3][0][0] * arucoCornersInTopView[0][0][1]))
+                             - ((arucoCornersInTopView[1][0][0] * arucoCornersInTopView[0][0][1])
+                                + (arucoCornersInTopView[2][0][0]
+                                   * arucoCornersInTopView[1][0][1])
+                                + (arucoCornersInTopView[3][0][0]
+                                   * arucoCornersInTopView[2][0][1])
+                                + (arucoCornersInTopView[0][0][0] * arucoCornersInTopView[3][0][1])))
 
         self.worldRatio = (self.arucoLength ** 2) / arucoArea
         self.worldRatio = sqrt(self.worldRatio)
@@ -243,8 +246,8 @@ class CameraCalibration:
 
         ##########################################################################
         # find camera Pose and save in yaml file
-        self.calibData = {'height': str(np.asarray(np.abs(cameraPosition[2][0]) * 100).tolist()[0][0]),
-                          'distance': str(np.asarray(np.abs(cameraPosition[1][0]) * 100).tolist()[0][0]),
+        self.calibData = {'height': str(np.asarray(np.abs(cameraPosition[2]) * 100).tolist()[0][0]),
+                          'distance': str(np.asarray(np.abs(cameraPosition[1]) * 100).tolist()[0][0]),
                           'yoke': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
                           'pitch': str(np.asarray((self.aruco_rvecs[0][0][1] * 180) / np.pi).tolist()),
                           'roll': str(np.asarray((self.aruco_rvecs[0][0][0] * 180) / np.pi).tolist())}
