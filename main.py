@@ -97,10 +97,10 @@ def video_feed_calib():
 def get_min_dist():
     print(video_camera.min_dist)
     json = request.get_json()
-    video_camera.min_dist = json['min-dist']
+    video_camera.min_dist = float(json['min-dist'])*100
     print(video_camera.min_dist)
     with open('min_dist.txt', 'w') as file:
-        file.write(video_camera.min_dist)
+        file.write(str(video_camera.min_dist))
     return jsonify(result="done")
 
 
