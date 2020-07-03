@@ -30,6 +30,9 @@ class CameraCalibration:
         self.topViewTransform = None
         self.calibrationDone = 0
         self.calibData = {}
+        self.noOfFrames = 0
+        self.prevArucoCorners = []
+        self.arucoFixed = 1
 
         self.checkIntrinstics()
         self.checkCalibration()
@@ -350,10 +353,40 @@ class CameraCalibration:
         if(not(self.aruco_ids is None)):
             if(len(self.aruco_ids) > 0):
 
-                if(self.calibration(img)):
-                    return 1
+                if(self.noOfFrames == 0):
+                    self.prevArucoCorners = []
+                    self.prevArucoCorners.append(self.aruco_corners[0][0][0])
+                    self.prevArucoCorners.append(self.aruco_corners[0][0][1])
+                    self.prevArucoCorners.append(self.aruco_corners[0][0][2])
+                    self.prevArucoCorners.append(self.aruco_corners[0][0][3])
+                    self.prevArucoCorners = np.array(self.prevArucoCorners)
                 else:
-                    return 0
+                    currentArucoCorners = []
+                    currentArucoCorners.append(self.aruco_corners[0][0][0])
+                    currentArucoCorners.append(self.aruco_corners[0][0][1])
+                    currentArucoCorners.append(self.aruco_corners[0][0][2])
+                    currentArucoCorners.append(self.aruco_corners[0][0][3])
+                    currentArucoCorners = np.array(currentArucoCorners)
+
+                    diffInPosition = currentArucoCorners - self.prevArucoCorners
+                    #print(diffInPosition)
+
+                    is_stable_1 = np.all((diffInPosition <= 2))
+                    is_stable_2 = np.all((diffInPosition >= -2))
+                    if(not (is_stable_1 and is_stable_2)):
+                        self.noOfFrames = 0
+                        self.arucoFixed = 0
+                    else:
+                        self.arucoFixed = 1
+
+                    if(self.noOfFrames >= 15):
+                        self.arucoFixed = 1
+                        if(self.calibration(img)):
+                            return 1
+                        else:
+                            return 0
+
+                self.noOfFrames = self.noOfFrames + 1
             else:
                 self.calibrationDone = 0
                 print("ARUCO NOT DETECTED!")
