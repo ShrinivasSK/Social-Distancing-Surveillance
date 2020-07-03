@@ -17,6 +17,7 @@ class VideoCamera(object):
         self.poseRecover = recoverPose(np.identity(3))
         self.calibrater = CameraCalibration()
         self.detector = Detector()
+        self.calibFrame = self.cap.read()
 
         # when calibrate now button is clicked this variable changes
         self.calibNow = False
@@ -85,7 +86,7 @@ class VideoCamera(object):
     def getCalibData(self, aruco_length, start_calib):
         # To avoid re reading from camera which leads to lagging
         # we are saving the frame as a property
-        frame = self.frame
+        frame = self.calibFrame
 
         # code to run the calibration
         # this is a block inside a while loop so is continuously running
@@ -149,30 +150,36 @@ class VideoCamera(object):
 
     def get_frame_calib(self, start_calib):
         ret, self.frame = self.cap.read()
+        self.calibFrame = np.copy(self.frame)
 
         if(start_calib):
             if(not self.calibrater.calibrationDone):
                 if (self.calibrater.aruco_ids is None):
                     self.calibrater.noOfFrames = 0
                     self.calibrater.prevArucoCorners = []
-                    cv2.putText(self.frame, "MARKER NOT FOUND!", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
-                                (0, 0, 255), 2)
+                    textsize = cv2.getTextSize("MARKER NOT FOUND!", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                    cv2.putText(self.frame, "MARKER NOT FOUND!", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
+                                (0, 0, 255), 4)
                 else:
                     if (len(self.calibrater.aruco_ids) == 0):
                         self.calibrater.noOfFrames = 0
                         self.calibrater.prevArucoCorners = []
-                        cv2.putText(self.frame, "MARKER NOT FOUND!", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
-                                    (0, 0, 255), 2)
+                        textsize = cv2.getTextSize("MARKER NOT FOUND!", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                        cv2.putText(self.frame, "MARKER NOT FOUND!", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
+                                    (0, 0, 255), 4)
                     else:
                         if(not self.calibrater.arucoFixed):
-                            cv2.putText(self.frame, "MARKER POSITION NOT FIXED", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
-                                        (0, 0, 255), 2)
+                            textsize = cv2.getTextSize("MARKER POSITION NOT FIXED", cv2.FONT_HERSHEY_PLAIN, 2, 3)[0]
+                            cv2.putText(self.frame, "MARKER POSITION NOT FIXED", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 2,
+                                        (0, 0, 255), 3)
                         else:
-                            cv2.putText(self.frame, "WAIT CALIBRATING", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
-                                        (0, 255, 255), 2)
+                            textsize = cv2.getTextSize("WAIT CALIBRATING", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                            cv2.putText(self.frame, "WAIT CALIBRATING", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
+                                        (0, 255, 255), 4)
             else:
-                cv2.putText(self.frame, "CALIBRATION COMPLETE", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
-                            (0, 255, 0), 2)
+                textsize = cv2.getTextSize("CALIBRATION COMPLETE", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                cv2.putText(self.frame, "CALIBRATION COMPLETE", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
+                            (0, 255, 0), 4)
 
         # convert to required format for streaming
         if ret:
