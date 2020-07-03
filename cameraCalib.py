@@ -32,8 +32,7 @@ class CameraCalibration:
         self.calibData = {}
         self.noOfFrames = 0
         self.prevArucoCorners = []
-        self.arucoFixed = 1
-
+        self.arucoFixed = 1 
         self.checkIntrinstics()
         self.checkCalibration()
 
@@ -369,7 +368,7 @@ class CameraCalibration:
                     currentArucoCorners = np.array(currentArucoCorners)
 
                     diffInPosition = currentArucoCorners - self.prevArucoCorners
-                    #print(diffInPosition)
+                    # print(diffInPosition)
 
                     is_stable_1 = np.all((diffInPosition <= 2))
                     is_stable_2 = np.all((diffInPosition >= -2))
