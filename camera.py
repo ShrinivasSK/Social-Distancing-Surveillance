@@ -147,8 +147,32 @@ class VideoCamera(object):
         else:
             return None
 
-    def get_frame_calib(self):
+    def get_frame_calib(self, start_calib):
         ret, self.frame = self.cap.read()
+
+        if(start_calib):
+            if(not self.calibrater.calibrationDone):
+                if (self.calibrater.aruco_ids is None):
+                    self.calibrater.noOfFrames = 0
+                    self.calibrater.prevArucoCorners = []
+                    cv2.putText(self.frame, "MARKER NOT FOUND!", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
+                                (0, 0, 255), 2)
+                else:
+                    if (len(self.calibrater.aruco_ids) == 0):
+                        self.calibrater.noOfFrames = 0
+                        self.calibrater.prevArucoCorners = []
+                        cv2.putText(self.frame, "MARKER NOT FOUND!", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
+                                    (0, 0, 255), 2)
+                    else:
+                        if(not self.calibrater.arucoFixed):
+                            cv2.putText(self.frame, "MARKER POSITION NOT FIXED", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
+                                        (0, 0, 255), 2)
+                        else:
+                            cv2.putText(self.frame, "WAIT CALIBRATING", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
+                                        (0, 255, 255), 2)
+            else:
+                cv2.putText(self.frame, "CALIBRATION COMPLETE", (20, 20), cv2.FONT_HERSHEY_PLAIN, 1,
+                            (0, 255, 0), 2)
 
         # convert to required format for streaming
         if ret:

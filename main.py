@@ -63,7 +63,7 @@ def video_stream_calib():
 
     while True:
         # returns frame in required format
-        frame = video_camera.get_frame_calib()
+        frame = video_camera.get_frame_calib(calib_start)
 
         # frame streaming part
         if frame != None:
