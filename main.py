@@ -57,9 +57,13 @@ def video_stream_calib():
     # to get a frame in req format and stream it
     global video_camera
     global global_frame
+    global calib_start
 
     if video_camera == None:
         video_camera = VideoCamera()
+
+    video_camera.calibrater.calibrationDone = 0
+    calib_start = False
 
     while True:
         # returns frame in required format

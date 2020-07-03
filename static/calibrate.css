@@ -3,7 +3,7 @@
 }
 
 .mainPage {
-  width: 60%;
+  width: 50%;
   /* margin-left: 10%; */
 }
 
@@ -20,6 +20,16 @@ body {
   box-shadow: gray 0 1px 10px;
   margin-bottom: 1.5rem;
   width: 100%;
+}
+
+.header-button{
+  box-shadow: none;
+  background-color: transparent;
+  border: solid 1px white;
+  float: left;
+  margin-top: 15px;
+  margin-left: 10px;
+  display: none;
 }
 
 .heading_main {
@@ -40,7 +50,6 @@ button {
   box-shadow: #a5a2a2 0 3px 2px;
   margin: 0 0.5rem;
   width: 7rem;
-  
 }
 
 button:focus {
@@ -53,7 +62,7 @@ button:active {
 
 .sideBar {
   box-sizing: border-box;
-  width: 22%;
+  width: 30%;
   padding: 2rem;
   padding-top: 0;
   font-size: 1.2rem;
@@ -139,7 +148,7 @@ input:focus {
 }
 
 .form-section {
-  padding: 0 2rem 0rem 2rem;
+  padding: 0 1rem 0rem 1rem;
   width: 70%;
 }
 
@@ -184,180 +193,60 @@ i {
 }
 
 .flexbox {
-  display: flex;
+  display: flex;.c
   align-content: space-between;
   justify-content: space-evenly;
 }
 
-/* Scrollbar */
-/* .sideBar::-webkit-scrollbar {
-  width: 7px;
-} */
-
-/* Track */
-/* .sideBar::-webkit-scrollbar-track {
-  background: #fff;
-} */
-
-/* Handle */
-/* .sideBar::-webkit-scrollbar-thumb {
-  background: gray;
-  border-radius: 5px;
-} */
-
-/* Handle on hover */
-/* .sideBar::-webkit-scrollbar-thumb:hover {
-  background: gray;
-}  */
-
-/* Media query */
-
-@media (max-width: 1147px) {
-  .bottom > div {
-    margin: 1rem auto;
-    width: 70%;
-  }
-
-  .bottom {
-    flex-direction: column;
+/* Media query for calibrate.html */
+@media (max-width: 990px) {
+  .form input {
+    width: 4rem;
   }
 }
 
-@media (max-width: 850px) {
-  .buttons_panel {
-    flex-direction: column;
+@media (max-width: 800px) {
+  .sideBar {
+    display: none;
   }
 
-  .buttons_panel > div {
-    margin: 1rem auto;
-    width: 70%;
-  }
-}
-
-@media (max-width: 704px) {
-  .buttons_panel > div,
-  .bottom > div {
-    margin: 1rem auto;
-    width: 90%;
+  .header-button{
+    display: inline;
   }
 
-  .bottom > div {
-    flex-direction: column;
-  }
-
-  .bottom > div > div {
-    width: 100%;
+  .mainPage{
+    width: 80%;
     margin: auto;
   }
 }
 
-/* .maker-form {
-    display: flex;
-  } */
-
-/* body {
-    font-family: "Lato", sans-serif;
-  }
-  
-  .mainPage {
-    display: flex;
-  }
-  
-  .mainPage > div {
-    width: 50%;
-  }
-  
-  .mainPage i {
-    margin: 0.5rem;
-    font-size: 1.2rem;
-    color: green;
-  }
-  
-  .mainPage button,
-  .button-container button {
-    background-color: #697172;
-    color: white;
-  }
-  
-  .section {
-    padding: 2rem; */
-/* margin: 0.7rem;
-    display: flex;
+@media (max-width: 525px){
+  .flexbox{
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #f7f7f7;
-    padding: 1rem;
-    border-radius: 5px;
-    line-height: 2rem;
-  } */
-/* 
-  .feed {
-    width: 40vw;
-    height: 40vh;
-    object-fit: cover;
-  }
-  
-  .noFeed-pose,
-  .noFeed-camera {
-    width: 40vw;
-    height: 40vh;
-    border: solid 1px black;
-  }
-  
-  .noFeedText-pose,
-  .noFeedText-camera {
-    text-align: center;
-    transform: translate(0, 8rem);
-    font-size: 2rem;
-  }
-  
-  .start-button {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .icon-tick {
-    width: 2rem;
-    height: 2rem;
-    object-fit: cover;
-  }
-  
-  /* Form styling */
-/* 
-  .form-container {
-    background-color: #f7f7f7;
-    border-radius: 0 0 5px 5px;
-    max-width: 925px;
-    margin: 1rem auto;
-  }
-  
-  .form-container h3 {
-    text-align: center;
-    background-color: #eabd6c;
-    border-radius: 5px 5px 0 0;
-    padding: 1rem;
-  }
-  
-  .form-container h4 {
-    padding-bottom: 1rem;
-    border-bottom: 1px dashed gray;
-  }
-  
-  .form {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-start;
-  }
-  
-  .button-container {
-    display: flex;
     justify-content: center;
+    align-content: center;
   }
-  
-  .button-container > * {
-    margin: 1rem 1rem 2rem 1rem;
-    padding: 0.5rem 2rem;
-    width: 150px;
-  } */
+
+  .flexbox>div{
+   margin: auto;  
+  }
+}
+
+@media (max-width: 470px){
+  .button-container{
+    width: 80%;
+    margin: auto;
+    padding: 1rem 0 ;
+  }
+
+  .marker-form-container button, .button-container button{
+    width: 5rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 396px){
+  .marker-form-container input{
+    margin-left: 1.5rem;
+  }
+}

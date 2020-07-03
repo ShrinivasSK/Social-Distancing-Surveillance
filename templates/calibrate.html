@@ -9,9 +9,9 @@
       type="text/css"
       href="{{ url_for('static',filename='calibrate.css') }}"
     />
-    
+
     <!-- to work without server -->
-    <!-- <link rel="stylesheet" type="text/css" href="../static/calibrate.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/calibrate.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
@@ -23,8 +23,11 @@
   </head>
   <body>
     <header class="header">
+      <!-- Initially invisible button -->
+      <button class="header-button">Instructions</button>
       <h1 class="heading_main">Calibration</h1>
     </header>
+
     <!-- Side Bar -->
     <div class="complete-screen">
       <div class="sideBar">
@@ -66,17 +69,23 @@
           <h3>Dimensions of the Marker:</h3>
           <input type="text" id="marker-input" name="length" />
           <label for="dist">(in cm)</label>
-          <button class="button marker-edit" id="marker-edit">Edit</button>
-          <button class="button marker-edit" id="marker-confirm">
-            Confirm
-          </button>
+          <div>
+            <button class="button marker-edit" id="marker-edit">Edit</button>
+            <button class="button marker-edit" id="marker-confirm">
+              Confirm
+            </button>
+          </div>
         </div>
         <div class="screen">
           <h3>
             Camera Calibration
           </h3>
           <div class="main-screen">
-            <img class="feed" id="feed-cam" src="{{ url_for('video_feed_calib') }}" />
+            <img
+              class="feed"
+              id="feed-cam"
+              src="{{ url_for('video_feed_calib') }}"
+            />
 
             <div class="start-button">
               <button id="start-calib">Start Calibration</button>
