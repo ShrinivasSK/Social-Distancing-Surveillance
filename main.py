@@ -28,12 +28,12 @@ def calibrate():
     """Video streaming"""
     return render_template('calibrate.html')
 
+
 @app.route('/credits-screen')
 # Main page Rendering
 def credits():
     """Video streaming"""
     return render_template('credits.html')
-
 
 
 def video_stream():
@@ -44,6 +44,9 @@ def video_stream():
 
     if video_camera == None:
         video_camera = VideoCamera()
+
+    video_camera.calibrater.checkIntrinstics()
+    video_camera.calibrater.checkCalibration()
 
     while True:
         # returns frame in required format

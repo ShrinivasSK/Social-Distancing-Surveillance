@@ -388,11 +388,11 @@ class CameraCalibration:
                 self.noOfFrames = self.noOfFrames + 1
             else:
                 self.calibrationDone = 0
-                print("ARUCO NOT DETECTED!")
+                # print("ARUCO NOT DETECTED!")
                 return 0
         else:
             self.calibrationDone = 0
-            print("ARUCO NOT DETECTED!")
+            # print("ARUCO NOT DETECTED!")
             return 0
 
 
