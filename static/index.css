@@ -201,10 +201,9 @@ footer h3 {
 footer a {
   text-decoration: none;
   color: #f7f7f7c9;
-  /* float: right; */
-  position: absolute;
+  /* position: absolute;
   right: 50px;
-  top: 40%;
+  top: 40%; */
 }
 
 /* Media query 
