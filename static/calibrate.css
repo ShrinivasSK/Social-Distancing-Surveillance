@@ -3,7 +3,7 @@
 }
 
 .mainPage {
-  width: 50%;
+  width: 60%;
   /* margin-left: 10%; */
 }
 
@@ -62,7 +62,7 @@ button:active {
 
 .sideBar {
   box-sizing: border-box;
-  width: 30%;
+  width: 25%;
   padding: 2rem;
   padding-top: 0;
   font-size: 1.2rem;

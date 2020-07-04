@@ -11,7 +11,7 @@
     />
 
     <!-- to work without server -->
-    <link rel="stylesheet" type="text/css" href="../static/calibrate.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../static/calibrate.css" /> -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
@@ -69,12 +69,12 @@
           <h3>Dimensions of the Marker:</h3>
           <input type="text" id="marker-input" name="length" />
           <label for="dist">(in cm)</label>
-          <div>
+          
             <button class="button marker-edit" id="marker-edit">Edit</button>
             <button class="button marker-edit" id="marker-confirm">
               Confirm
             </button>
-          </div>
+          
         </div>
         <div class="screen">
           <h3>
@@ -167,5 +167,5 @@
     src="{{ url_for('static', filename='calibrate.js') }}"
   ></script>
   <!-- to work without server -->
-  <script type="text/javascript" src="../static/calibrate.js"></script>
+  <!-- <script type="text/javascript" src="../static/calibrate.js"></script> -->
 </html>

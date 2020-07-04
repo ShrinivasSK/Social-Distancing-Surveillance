@@ -28,6 +28,13 @@ def calibrate():
     """Video streaming"""
     return render_template('calibrate.html')
 
+@app.route('/credits-screen')
+# Main page Rendering
+def credits():
+    """Video streaming"""
+    return render_template('credits.html')
+
+
 
 def video_stream():
     # basic function to use the VideoCamera object in camera.py
