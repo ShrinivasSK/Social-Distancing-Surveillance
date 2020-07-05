@@ -194,18 +194,19 @@ class CameraCalibration:
         self.worldRatio = 0.0
         self.calibrate(img, arucoLength)
 
-    def updateCalibration(self, img, newRMat, newTvec):
-        cameraMatrixInverse = np.linalg.inv(self.cameraMatrix)
-        rvecMat = newRMat
+    def updateCalibration(self, img, homography):
+        #cameraMatrixInverse = np.linalg.inv(self.cameraMatrix)
+        #rvecMat = newRMat
+        #print(homography)
 
-        newTransform = np.zeros((4, 4))
-        for i in range(0, 3):
-            for j in range(0, 3):
-                newTransform[i][j] = rvecMat[i][j]
-        newTransform[3][3] = 1
-        newTransform[0][3] = newTvec[0][0]
-        newTransform[1][3] = newTvec[1][0]
-        newTransform[2][3] = newTvec[2][0]
+        #newTransform = np.zeros((4, 4))
+        #for i in range(0, 3):
+        #    for j in range(0, 3):
+        #        newTransform[i][j] = rvecMat[i][j]
+        #newTransform[3][3] = 1
+        #newTransform[0][3] = newTvec[0][0]
+        #newTransform[1][3] = newTvec[1][0]
+        #newTransform[2][3] = newTvec[2][0]
 
         for i in range(0, 4):
             arucoCorner = np.zeros((3, 1))
@@ -213,18 +214,19 @@ class CameraCalibration:
             arucoCorner[1][0] = self.aruco_corners[0][0][i][1]
             arucoCorner[2][0] = 1
 
-            arucoCorner = cameraMatrixInverse.dot(arucoCorner)
-            arucoCornerInCFrame = np.zeros((4, 1))
-            arucoCornerInCFrame[0][0] = arucoCorner[0][0]
-            arucoCornerInCFrame[1][0] = arucoCorner[1][0]
-            arucoCornerInCFrame[2][0] = arucoCorner[2][0]
-            arucoCornerInCFrame[3][0] = 1
+            #arucoCorner = cameraMatrixInverse.dot(arucoCorner)
+            #arucoCornerInCFrame = np.zeros((4, 1))
+            #arucoCornerInCFrame[0][0] = arucoCorner[0][0]
+            #arucoCornerInCFrame[1][0] = arucoCorner[1][0]
+            #arucoCornerInCFrame[2][0] = arucoCorner[2][0]
+            #arucoCornerInCFrame[3][0] = 1
 
-            newArucoCornerInCFrame = newTransform.dot(arucoCornerInCFrame)
+            #newArucoCornerInCFrame = newTransform.dot(arucoCornerInCFrame)
 
-            temp = np.array(([1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]))
-            newArucoCorner = temp.dot(newArucoCornerInCFrame)
-            newArucoCorner = self.cameraMatrix.dot(newArucoCorner)
+            #temp = np.array(([1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]))
+            #newArucoCorner = temp.dot(newArucoCornerInCFrame)
+            #newArucoCorner = self.cameraMatrix.dot(newArucoCorner)
+            newArucoCorner = homography.dot(arucoCorner)
             self.aruco_corners[0][0][i][0] = newArucoCorner[0][0]
             self.aruco_corners[0][0][i][1] = newArucoCorner[1][0]
 
@@ -242,11 +244,14 @@ class CameraCalibration:
             cornerInTopView = self.topViewTransform.dot(temp)
             print(cornerInTopView)
             corner = np.zeros((1, 2))
-            corner[0][0] = cornerInTopView[0][0]
-            corner[0][1] = cornerInTopView[1][0]
+            corner[0][0] = cornerInTopView[0][0] / cornerInTopView[2][0]
+            corner[0][1] = cornerInTopView[1][0] / cornerInTopView[2][0]
             arucoCornersInTopView.append(corner)
 
         arucoCornersInTopView = np.array(arucoCornersInTopView)
+
+        print(arucoCornersInTopView[0][0][0])
+        print(arucoCornersInTopView[1][0][0])
 
         arucoArea = (0.5) * (((arucoCornersInTopView[0][0][0] * arucoCornersInTopView[1][0][1])
                               + (arucoCornersInTopView[1][0][0]

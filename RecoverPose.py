@@ -13,6 +13,7 @@ class recoverPose():
         self.backgroundFound = False
         self.R_mat = np.zeros((3, 3))
         self.t_mat = np.zeros((3, 1))
+        self.homography = np.zeros((3, 3))
 
     def give_pose(self, img1, img2, cameraMatrix):
         R = np.zeros((3, 3))
@@ -42,17 +43,38 @@ class recoverPose():
         left_points = np.float32(left_points)
         right_points = np.float32(right_points)
 
-        E, mask = cv2.findEssentialMat(
-            left_points, right_points, cameraMatrix, method=cv2.RANSAC, prob=0.999, threshold=1.0)
+        #cv2.drawKeypoints(img1, kp1, img1);
+        #cv2.drawKeypoints(img2, kp2, img2);
 
-        cv2.recoverPose(E, left_points, right_points, cameraMatrix, R, t, mask)
+        #To check feature matching
+        #result = np.zeros((960, 1280))
+        #result = cv2.drawMatches(img1, kp1, img2, kp2, good_matches, result);
 
-        return R, t
+        homography = np.zeros((3, 3))
+        homography, _ = cv2.findHomography(left_points, right_points, cv2.RANSAC)
+
+        ##To check feature matching by stitching images
+        #homography_inv = np.zeros((3, 3))
+        #homography_inv, _ = cv2.findHomography(right_points, left_points, cv2.RANSAC)
+        #img2_changed = np.zeros((img1.shape[0] + img2.shape[0], img1.shape[1] + img2.shape[1]))
+        #img2_changed = cv2.warpPerspective(img2, homography_inv, (img1.shape[0] + img2.shape[0], img1.shape[1] + img2.shape[1]))
+        #for i in range(0, img1.shape[0]):
+        #    for j in range(0, img1.shape[1]):
+        #        img2_changed[i][j][0] = img1[i][j][0]
+        #        img2_changed[i][j][1] = img1[i][j][1]
+        #        img2_changed[i][j][2] = img1[i][j][2]
+
+        #E, mask = cv2.findEssentialMat(
+            #left_points, right_points, cameraMatrix, method=cv2.RANSAC, prob=0.999, threshold=1.0)
+
+        #cv2.recoverPose(E, left_points, right_points, cameraMatrix, R, t, mask)
+
+        return homography
 
     # Calcaulate the background
     def original_background(self, img):
 
-        if self.k % 100 == 0:
+        if self.k % 10 == 0:
             temp = img.copy()
             self.frames.append(temp)
 
@@ -68,7 +90,7 @@ class recoverPose():
     # The Recalibration Code
     def pose(self, frame):
 
-        if self.k % 100 == 0:
+        if self.k % 10 == 0:
             temp = frame.copy()
             self.frames.append(temp)
 
@@ -76,11 +98,12 @@ class recoverPose():
             self.background_curr = np.median(
                 self.frames, axis=0).astype(dtype=np.uint8)
 
-            R, t = self.give_pose(
+            homography = self.give_pose(
                 self.background_orig, self.background_curr, self.cameraMatrix)
 
-            self.R_mat = R
-            self.t_mat = t
+            #self.R_mat = R
+            #self.t_mat = t
+            self.homography = homography
             self.calibrated = True
 
             self.frames.clear()
