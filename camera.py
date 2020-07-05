@@ -4,7 +4,7 @@ import threading
 from RecoverPose import recoverPose
 import datetime
 from cameraCalib import CameraCalibration
-from yolo_detection import Detector
+from ssd_detection import Detector
 
 global_frame = None
 
