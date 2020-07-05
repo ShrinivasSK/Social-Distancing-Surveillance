@@ -138,7 +138,7 @@ class VideoCamera(object):
                 self.calibNow = False
                 self.poseRecover.calibrated = False
                 self.calibrater.updateCalibration(
-                    self.frame, self.poseRecover.R_mat, self.poseRecover.t_mat)
+                    self.frame, self.poseRecover.homography)
 
         # convert to required format for streaming
         if ret:
@@ -151,6 +151,7 @@ class VideoCamera(object):
     def get_frame_calib(self, start_calib):
         ret, self.frame = self.cap.read()
         self.calibFrame = np.copy(self.frame)
+
 
         if(start_calib):
             if(not self.calibrater.calibrationDone):
