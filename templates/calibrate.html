@@ -84,134 +84,103 @@
       <h1 class="heading_main">Calibration</h1>
     </header>
 
-    <!-- Side Bar -->
     <div class="complete-screen">
-      <div class="sideBar">
-        <h1 class="sidebar-heading">Instructions</h1>
-        <p>
-          Different cameras have different intrinsic parameters and have
-          different field of view. To accurately judge distance from a camera we
-          first need to find out these parameters. This is known as Camera
-          Calibration.
-        </p>
-        <ul>
-          <li>
-            To do this you need to use the Aruco Tags that we have provided to
-            you. If you have used the same print out then the values given in
-            the dimensions of the markers are accurate. But if you have the
-            changed the printout in some way kindly change the dimensions of the
-            marker to the values measured from your printout. Please try to be
-            as accurate as possible for better results
-          </li>
-          <li>
-            Now stick the Aruco tags on the floor in the field of view of the
-            camera and click on the start calibration button. The system will
-            then analyse the Aruco tags and show the results in a form below.
-            Wait till the results appear.
-          </li>
-          <li>
-            Look at the values shown in the form and check whether they look
-            accurate. If not then edit the values after clicking on the edit
-            button and then click confirm to confirm the values. If the values
-            are accurate already then directly click on Confirm to use them for
-            further calculations
-          </li>
-        </ul>
-        <h3>The camera calibration is complete!</h3>
-      </div>
-      <!-- Main Screen -->
       <div class="mainPage">
         <div class="marker-form-container">
-          <h3>Dimensions of the Marker:</h3>
-          <input type="text" id="marker-input" name="length" />
-          <label for="dist">(in cm)</label>
           <div>
-            <button class="button marker-edit" id="marker-edit">Edit</button>
-            <button class="button marker-edit" id="marker-confirm">
-              Confirm
-            </button>
-          </div>
-        </div>
-        <div class="screen">
-          <h3>
-            Camera Calibration
-          </h3>
-          <div class="main-screen">
-            <img
-              class="feed"
-              id="feed-cam"
-              src="{{ url_for('video_feed_calib') }}"
-            />
-
-            <div class="start-button">
-              <button id="start-calib">Start Calibration</button>
-              <i class="fas fa-check-circle" id="calib-tick"></i>
+            <h3>Dimensions of the Marker:</h3>
+            <input type="text" id="marker-input" name="length" />
+            <label for="dist">(in cm)</label>
+            <div>
+              <button class="button marker-edit" id="marker-edit">Edit</button>
+              <button class="button marker-edit" id="marker-confirm">
+                Confirm
+              </button>
             </div>
           </div>
         </div>
+        <div>
+          <div class="screen">
+            <h3>
+              Camera Calibration
+            </h3>
+            <div class="main-screen">
+              <img
+                class="feed"
+                id="feed-cam"
+                src="{{ url_for('video_feed_calib') }}"
+              />
 
-        <!-- Form -->
-        <div class="form-container" id="form-container">
-          <h3>Calcluated Pose of the Camera</h3>
-
-          <form class="form" id="form">
-            <div class="flexbox">
-              <div class="form-section">
-                <h4 class="form-section-text">About the Camera:</h4>
-                <table>
-                  <tr>
-                    <td>
-                      <label for="height">Height of Camera</label>
-                    </td>
-                    <td>
-                      <input type="text" id="height" name="height" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="distance">Distance from Marker</label>
-                    </td>
-                    <td>
-                      <input type="text" id="distance" name="distance" />
-                    </td>
-                  </tr>
-                </table>
-              </div>
-
-              <div class="form-section">
-                <h4 class="form-section-text">Orientation of the Camera:</h4>
-                <table>
-                  <tr>
-                    <td>
-                      <label for="yaw">Yaw</label>
-                    </td>
-                    <td><input type="text" id="yaw" name="yaw" /></td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="pitch">Pitch</label>
-                    </td>
-                    <td>
-                      <input type="text" id="pitch" name="pitch" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <label for="roll">Roll</label>
-                    </td>
-                    <td>
-                      <input type="text" id="roll" name="roll" />
-                    </td>
-                  </tr>
-                </table>
+              <div class="start-button">
+                <button id="start-calib">Start Calibration</button>
+                <i class="fas fa-check-circle" id="calib-tick"></i>
               </div>
             </div>
-          </form>
-          <div class="button-container">
-            <button class="button pose-edit" id="pose-edit">Edit</button>
-            <button class="button pose-submit" id="pose-confirm">
-              Confirm
-            </button>
+          </div>
+
+          <!-- Form -->
+          <div class="form-container" id="form-container">
+            <h3>Calcluated Pose of the Camera</h3>
+
+            <form class="form" id="form">
+              <div class="flexbox">
+                <div class="form-section">
+                  <h4 class="form-section-text">About the Camera:</h4>
+                  <table>
+                    <tr>
+                      <td>
+                        <label for="height">Height of Camera</label>
+                      </td>
+                      <td>
+                        <input type="text" id="height" name="height" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="distance">Distance from Marker</label>
+                      </td>
+                      <td>
+                        <input type="text" id="distance" name="distance" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div class="form-section">
+                  <h4 class="form-section-text">Orientation of the Camera:</h4>
+                  <table>
+                    <tr>
+                      <td>
+                        <label for="yaw">Yaw</label>
+                      </td>
+                      <td><input type="text" id="yaw" name="yaw" /></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="pitch">Pitch</label>
+                      </td>
+                      <td>
+                        <input type="text" id="pitch" name="pitch" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label for="roll">Roll</label>
+                      </td>
+                      <td>
+                        <input type="text" id="roll" name="roll" />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </form>
+            <div class="button-container">
+              <button class="button pose-edit" id="pose-edit">Edit</button>
+              <button class="button pose-submit" id="pose-confirm">
+                Confirm
+              </button>
+            </div>
           </div>
         </div>
       </div>
