@@ -3,7 +3,7 @@
 }
 
 .mainPage {
-  width: 60%;
+  width: 50%;
   /* margin-left: 10%; */
 }
 
@@ -62,7 +62,7 @@ button:active {
 
 .sideBar {
   box-sizing: border-box;
-  width: 25%;
+  width: 30%;
   padding: 2rem;
   padding-top: 0;
   font-size: 1.2rem;
@@ -250,3 +250,45 @@ i {
     margin-left: 1.5rem;
   }
 }
+
+/* Lightbox */
+.backdrop {
+    z-index: 1;
+    opacity: .0;
+    filter: alpha(opacity=0);
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background: #000;
+}
+ 
+.box {
+    z-index: 2;
+    position: fixed;
+    opacity: 1;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 80vh;
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    -moz-box-shadow: 0px 0px 5px #444444;
+    -webkit-box-shadow: 0px 0px 5px #444444;
+    box-shadow: 0px 0px 5px #444444;
+    overflow-y: scroll;
+  }
+
+  .box > * {
+      z-index: 3;
+  }
+
+  .close {
+      float: right;
+      cursor: pointer;
+  }

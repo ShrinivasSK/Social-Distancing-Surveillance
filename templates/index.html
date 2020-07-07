@@ -13,16 +13,33 @@
     />
 
     <!-- to work without server -->
-    <!-- <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
-    <link rel="stylesheet" type="text/css" href="../static/index.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
+    <link rel="stylesheet" type="text/css" href="../static/index.css" />
     <title>Social Distancing Surveillance</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
       rel="stylesheet"
     />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#click").click(function () {
+          $("html, body").animate(
+            {
+              scrollTop: $("#scroll-anchor").offset().top,
+            },
+            1000
+          );
+        });
+      });
+    </script>
   </head>
   <body>
     <header class="header">
+      <button class="transparent-button" id="click">
+        First Time Here?
+      </button>
       <h1 class="heading_main">Social Distancing Surveillance</h1>
     </header>
     <!-- Main Screen -->
@@ -30,43 +47,53 @@
       <div class="noFeed" id="noFeed">
         <h2 class="noFeedText">Streaming Stopped</h2>
       </div>
-      <img class="video_feed" src="{{ url_for('video_feed') }}" id="mainFeed" />
-      <!-- Button Panel -->
-      <div class="buttons_panel">
-        <div class="button_section">
-          <!-- Recalibration -->
-          <h3 class="button_section_text">Recalibration</h3>
-          <div class="button_container">
-            <div class="auto-calib">
-              <h4 class="button-text">Auto</h4>
-              <label class="switch">
-                <input class="switch-input" type="checkbox" id="toggle-auto" />
-                <span class="switch-label" data-on="On" data-off="Off"></span>
-                <span class="switch-handle"></span>
-              </label>
+      <div id="grid-view">
+        <img
+          class="video_feed"
+          src="{{ url_for('video_feed') }}"
+          id="mainFeed"
+        />
+        <!-- Button Panel -->
+        <div class="buttons_panel">
+          <div class="button_section">
+            <!-- Recalibration -->
+            <h3 class="button_section_text">Recalibration</h3>
+            <div class="button_container">
+              <div class="auto-calib">
+                <h4 class="button-text">Auto</h4>
+                <label class="switch">
+                  <input
+                    class="switch-input"
+                    type="checkbox"
+                    id="toggle-auto"
+                  />
+                  <span class="switch-label" data-on="On" data-off="Off"></span>
+                  <span class="switch-handle"></span>
+                </label>
+              </div>
+              <button class="button button-now" id="recalib">Now</button>
             </div>
-            <button class="button button-now" id="recalib">Now</button>
           </div>
-        </div>
-        <!-- Control Feed -->
-        <div class="button_section">
-          <h3 class="button_section_text">Control the feed</h3>
-          <div class="button_container">
-            <button class="button" id="streamPlay">Stream</button>
-            <button class="button" id="streamStop">Stop</button>
+          <!-- Control Feed -->
+          <div class="button_section">
+            <h3 class="button_section_text">Control the feed</h3>
+            <div class="button_container">
+              <button class="button" id="streamPlay">Stream</button>
+              <button class="button" id="streamStop">Stop</button>
+            </div>
           </div>
-        </div>
-        <!-- Min Physical Distance -->
-        <div class="button_section">
-          <h3 class="button_section_text text-change">
-            Minimum Physical Distance
-          </h3>
-          <div class="button_container">
-            <form class="min-dist" id="min-dist">
-              <input type="text" id="dist" name="dist" />
-              <label for="dist">(in m)</label>
-            </form>
-            <button class="button" id="thresh">Edit</button>
+          <!-- Min Physical Distance -->
+          <div class="button_section">
+            <h3 class="button_section_text text-change">
+              Minimum Physical Distance
+            </h3>
+            <div class="button_container">
+              <form class="min-dist" id="min-dist">
+                <input type="text" id="dist" name="dist" />
+                <label for="dist">(in m)</label>
+              </form>
+              <button class="button" id="thresh">Edit</button>
+            </div>
           </div>
         </div>
       </div>
@@ -76,7 +103,7 @@
     <div class="bottom">
       <!-- Calibrate Page Link-->
       <div class="calibrate">
-        <div class="bottom_section_heading-1">
+        <div class="bottom_section_heading-1" id="scroll-anchor">
           <h3>First time here?</h3>
         </div>
 
@@ -106,7 +133,8 @@
       </div>
     </div>
     <footer>
-      <a href="/credits-screen">Team Credits</a>
+      <!-- <h3>Team AGV, IIT Kharagpur</h3> -->
+      <a href="../templates/credits.html">Team Credits</a>
     </footer>
   </body>
   <script
