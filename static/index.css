@@ -220,7 +220,7 @@ footer a {
 
 /* Media query 
 To make Page Responsive to different screen sizes */
-@media (min-width: 1000px) {
+/* @media (min-width: 1000px) {
   #grid-view {
     display: flex;
     align-content: center;
@@ -236,7 +236,7 @@ To make Page Responsive to different screen sizes */
   .buttons_panel > div {
     width: 100%;
   }
-}
+} */
 
 @media (max-width: 1120px) {
   .bottom > div {
