@@ -3,23 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
+    <!-- <link
       rel="stylesheet"
       href="{{ url_for('static',filename='index.css') }}"
     />
     <link
       rel="stylesheet"
       href="{{ url_for('static',filename='toggle-switch.css') }}"
-    />
-
-    <!-- to work without server -->
-<!--     <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
-    <link rel="stylesheet" type="text/css" href="../static/index.css" /> -->
-    <title>Social Distancing Surveillance</title>
+    /> -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+    <!-- to work without server -->
+    <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
+    <link rel="stylesheet" type="text/css" href="../static/index.css" />
+    <title>Social Distancing Surveillance</title>
+    <!-- <link
+      href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
+      rel="stylesheet"
+    /> -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
     <script>
@@ -42,58 +45,62 @@
       </button>
       <h1 class="heading_main">Social Distancing Surveillance</h1>
     </header>
-    <!-- Main Screen -->
-    <div class="main_screen">
-      <div class="noFeed" id="noFeed">
-        <h2 class="noFeedText">Streaming Stopped</h2>
-      </div>
-      <div id="grid-view">
+
+    <div id="grid-view">
+      <!-- Main Screen -->
+      <div class="main_screen">
+        <div class="noFeed" id="noFeed">
+          <h2 class="noFeedText">Streaming Stopped</h2>
+        </div>
         <img
           class="video_feed"
           src="{{ url_for('video_feed') }}"
           id="mainFeed"
         />
-        <!-- Button Panel -->
-        <div class="buttons_panel">
-          <div class="button_section">
-            <!-- Recalibration -->
-            <h3 class="button_section_text">Recalibration</h3>
-            <div class="button_container">
-              <div class="auto-calib">
-                <h4 class="button-text">Auto</h4>
-                <label class="switch">
-                  <input
-                    class="switch-input"
-                    type="checkbox"
-                    id="toggle-auto"
-                  />
-                  <span class="switch-label" data-on="On" data-off="Off"></span>
-                  <span class="switch-handle"></span>
-                </label>
-              </div>
-              <button class="button button-now" id="recalib">Now</button>
+      </div>
+      <!-- Button Panel -->
+      <div class="buttons_panel">
+        <div class="button_section">
+          <!-- Recalibration -->
+          <h3 class="button_section_text">Recalibration</h3>
+          <i class="material-icons down-icon" id="down-recab"
+            >arrow_drop_down</i
+          >
+          <div class="button_container" id="container-recab">
+            <div class="auto-calib">
+              <h4 class="button-text">Auto</h4>
+              <label class="switch">
+                <input class="switch-input" type="checkbox" id="toggle-auto" />
+                <span class="switch-label" data-on="On" data-off="Off"></span>
+                <span class="switch-handle"></span>
+              </label>
             </div>
+            <button class="button button-now" id="recalib">Now</button>
           </div>
-          <!-- Control Feed -->
-          <div class="button_section">
-            <h3 class="button_section_text">Control the feed</h3>
-            <div class="button_container">
-              <button class="button" id="streamPlay">Stream</button>
-              <button class="button" id="streamStop">Stop</button>
-            </div>
+        </div>
+        <!-- Control Feed -->
+        <div class="button_section">
+          <h3 class="button_section_text">Control the feed</h3>
+          <i class="material-icons down-icon" id="down-control"
+            >arrow_drop_down</i
+          >
+          <div class="button_container" id="container-control">
+            <button class="button" id="streamPlay">Stream</button>
+            <button class="button" id="streamStop">Stop</button>
           </div>
-          <!-- Min Physical Distance -->
-          <div class="button_section">
-            <h3 class="button_section_text text-change">
-              Minimum Physical Distance
-            </h3>
-            <div class="button_container">
-              <form class="min-dist" id="min-dist">
-                <input type="text" id="dist" name="dist" />
-                <label for="dist">(in m)</label>
-              </form>
-              <button class="button" id="thresh">Edit</button>
-            </div>
+        </div>
+        <!-- Min Physical Distance -->
+        <div class="button_section">
+          <h3 class="button_section_text text-change">
+            Minimum Physical Distance
+          </h3>
+          <i class="material-icons down-icon" id="down-dist">arrow_drop_down</i>
+          <div class="button_container" id="container-dist">
+            <form class="min-dist" id="min-dist">
+              <input type="text" id="dist" name="dist" />
+              <label for="dist">(in m)</label>
+            </form>
+            <button class="button" id="thresh">Edit</button>
           </div>
         </div>
       </div>
@@ -109,8 +116,8 @@
 
         <div class="text_part">
           <p class="text">
-            To get the system running you will have to calibrate the camera to
-            correctly measure the distance. Click on the button to calibrate.
+            To get the system running you will have to calibrate the camera.
+            Click on the button to calibrate.
           </p>
           <a href="/calibrate-screen"
             ><button class="button">Calibrate</button></a
@@ -134,13 +141,13 @@
     </div>
     <footer>
       <!-- <h3>Team AGV, IIT Kharagpur</h3> -->
-      <a href="../templates/credits.html">Team Credits</a>
+      <a href="/credits-screen">Team Credits</a>
     </footer>
   </body>
-  <script
+  <!-- <script
     type="text/javascript"
-    src="{{ url_for('static', filename='main.js') }}"
-  ></script>
+    src="{{ url_for('static', filename='index.js') }}"
+  ></script> -->
   <!-- to work without server -->
-  <!-- <script type="text/javascript" src="../static/main.js"></script> -->
+  <script type="text/javascript" src="../static/index.js"></script>
 </html>

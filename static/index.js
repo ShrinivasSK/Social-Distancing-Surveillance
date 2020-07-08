@@ -4,6 +4,14 @@ var buttonStreamPlay = document.getElementById("streamPlay");
 var buttonEditThresh = document.getElementById("thresh");
 var buttonReCalib = document.getElementById("recalib");
 
+var containerCalib = document.getElementById("container-recab");
+var containerControl = document.getElementById("container-control");
+var containerDist = document.getElementById("container-dist");
+
+var iconCalib = document.getElementById("down-recab");
+var iconControl = document.getElementById("down-control");
+var iconDist = document.getElementById("down-dist");
+
 var noFeed = document.getElementById("noFeed");
 var mainScreen = document.getElementById("mainFeed");
 
@@ -21,11 +29,11 @@ buttonStreamPlay.disabled = true;
 noFeed.hidden = true;
 
 //variable to check whether auto recalibration is on or off
+toggleAuto.checked = true;
 var is_auto = toggleAuto.checked;
 
 //switch to toggle is_auto
 toggleAuto.onchange = function () {
-  
   is_auto = !is_auto;
   //send the server information about the change
   if (is_auto) {
@@ -48,7 +56,6 @@ buttonReCalib.onclick = function () {
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify({ action: "calib-now" }));
 };
-
 
 //show the streaming
 buttonStreamPlay.onclick = function () {
@@ -80,11 +87,42 @@ buttonEditThresh.onclick = function () {
 
     var data = {
       "min-dist": minDistForm.elements[0].value,
-    };  
+    };
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/min-dist");
     xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     xhr.send(JSON.stringify(data));
+  }
+};
+
+//For mobile view
+iconCalib.onclick = function () {
+  if (iconCalib.innerHTML == "arrow_drop_down") {
+    containerCalib.style.display = "flex";
+    iconCalib.innerHTML = "arrow_drop_up";
+  } else {
+    containerCalib.style.display = "none";
+    iconCalib.innerHTML = "arrow_drop_down";
+  }
+};
+
+iconControl.onclick = function () {
+  if (iconControl.innerHTML == "arrow_drop_down") {
+    containerControl.style.display = "flex";
+    iconControl.innerHTML = "arrow_drop_up";
+  } else {
+    containerControl.style.display = "none";
+    iconControl.innerHTML = "arrow_drop_down";
+  }
+};
+
+iconDist.onclick = function () {
+  if (iconDist.innerHTML == "arrow_drop_down") {
+    containerDist.style.display = "flex";
+    iconDist.innerHTML = "arrow_drop_up";
+  } else {
+    containerDist.style.display = "none";
+    iconDist.innerHTML = "arrow_drop_down";
   }
 };
