@@ -4,14 +4,14 @@
     <title>Calibrate</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link
+    <link
       rel="stylesheet"
       type="text/css"
       href="{{ url_for('static',filename='calibrate.css') }}"
-    /> -->
+    />
 
     <!-- to work without server -->
-    <link rel="stylesheet" type="text/css" href="../static/calibrate.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../static/calibrate.css" /> -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
@@ -22,7 +22,7 @@
     />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-    <script>
+    <!-- <script>
       jQuery(document).ready(function () {
         /* Open lightbox on button click */
         $(".lightbox-toggle").click(function () {
@@ -40,11 +40,11 @@
           $(".box").fadeOut();
         });
       });
-    </script>
+    </script> -->
   </head>
   <body>
     <header class="header">
-      <!-- Initially invisible button -->
+      <!-- Initially invisible button
       <button class="header-button lightbox-toggle">Instructions</button>
       <div class="backdrop"></div>
 
@@ -52,35 +52,31 @@
         <div class="close">x</div>
         <ul>
           <li>
-            Enter the dimensions of the aruco tag in the space provided. If you have used the page we have given then let the default 
+            Enter the dimensions of the aruco tag in the space provided. If you
+            have used the page we have given then go with the default value.
           </li>
           <li>
             Now stick the Aruco tags on the floor in the field of view of the
-            camera and click on the start calibration button. The system will
-            then analyse the Aruco tags and show the results in a form below.
-            Wait till the results appear.
+            camera and click on the start calibration button.
           </li>
           <li>
-            Look at the values shown in the form and check whether they look
-            accurate. If not then edit the values after clicking on the edit
-            button and then click confirm to confirm the values. If the values
-            are accurate already then directly click on Confirm to use them for
-            further calculations
+            Check whether the results are accurate. If not edit the values. Then
+            click on confirm to save the values.
           </li>
         </ul>
         <h3>The camera calibration is complete!</h3>
-      </div>
+      </div> -->
       <h1 class="heading_main">Calibration</h1>
     </header>
-
+    <div class="footer"></div>
     <div class="complete-screen">
       <div class="mainPage">
         <div class="marker-form-container">
-          <div>
+          <div class="marker-form">
             <h3>Dimensions of the Marker:</h3>
             <input type="text" id="marker-input" name="length" />
             <label for="dist">(in cm)</label>
-            <div>
+            <div class="button-container-form">
               <button class="button marker-edit" id="marker-edit">Edit</button>
               <button class="button marker-edit" id="marker-confirm">
                 Confirm
@@ -110,7 +106,7 @@
           <!-- Form -->
           <div class="form-container" id="form-container">
             <h3>Calcluated Pose of the Camera</h3>
-
+            <div class="footer"></div>
             <form class="form" id="form">
               <div class="flexbox">
                 <div class="form-section">
@@ -134,7 +130,7 @@
                     </tr>
                   </table>
                 </div>
-
+                
                 <div class="form-section">
                   <h4 class="form-section-text">Orientation of the Camera:</h4>
                   <table>
@@ -176,10 +172,10 @@
     </div>
   </body>
 
-  <!-- <script
+  <script
     type="text/javascript"
     src="{{ url_for('static', filename='calibrate.js') }}"
-  ></script> -->
+  ></script>
   <!-- to work without server -->
-  <script type="text/javascript" src="../static/calibrate.js"></script>
+  <!-- <script type="text/javascript" src="../static/calibrate.js"></script> -->
 </html>
