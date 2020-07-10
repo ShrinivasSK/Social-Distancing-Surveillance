@@ -29,6 +29,9 @@ class VideoCamera(object):
         self.min_dist = 150  # (cm)
         self.max_dist = 350  # (cm)
 
+
+        self.social_distancing_violated = False
+
     def __del__(self):
         self.cap.release()
 
@@ -68,6 +71,7 @@ class VideoCamera(object):
             return -1
 
     def markWorldDistance(self, points):
+        counter = 0
         for point1 in points:
             for point2 in points:
                 if(point1 == point2):
@@ -77,11 +81,17 @@ class VideoCamera(object):
                 elif(self.findWorldDistance(point1, point2) > self.max_dist):
                     continue
                 elif(self.findWorldDistance(point1, point2) < self.min_dist):
+                    counter = counter + 1
                     cv2.line(self.frame, point1, point2,
                              (0, 0, 255), thickness=3, lineType=8)
                     continue
                 cv2.line(self.frame, point1, point2,
                          (0, 255, 0), thickness=3, lineType=8)
+
+        if(counter == 0):
+            self.social_distancing_violated = False
+        else:
+            self.social_distancing_violated = True
 
     def getCalibData(self, aruco_length, start_calib):
         # To avoid re reading from camera which leads to lagging

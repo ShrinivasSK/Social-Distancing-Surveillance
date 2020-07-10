@@ -386,6 +386,7 @@ class CameraCalibration:
                     if(self.noOfFrames >= 15):
                         self.arucoFixed = 1
                         if(self.calibration(img)):
+                            print("Calibration Done")
                             return 1
                         else:
                             return 0
