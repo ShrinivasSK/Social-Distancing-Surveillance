@@ -118,6 +118,20 @@ def get_min_dist():
     return jsonify(result="done")
 
 
+@app.route('/start_stop_index', methods=['POST'])
+def onstart_stop_index():
+    json = request.get_json()
+    print(json['action'])
+    return jsonify(result="done")
+
+
+@app.route('/start_stop_calib', methods=['POST'])
+def onstart_stop_calib():
+    json = request.get_json()
+    print(json['action'])
+    return jsonify(result="done")
+
+
 @app.route('/recalib', methods=['POST'])
 # Handle recalibration calls
 def recalib():

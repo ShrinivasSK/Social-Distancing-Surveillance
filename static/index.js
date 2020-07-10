@@ -32,6 +32,21 @@ noFeed.hidden = true;
 toggleAuto.checked = true;
 var is_auto = toggleAuto.checked;
 
+var body = document.getElementById("body");
+
+body.onload = function () {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/start_stop_index");
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.send(JSON.stringify({ action: "start" }));
+};
+
+$(window).bind("beforeunload", function () {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/start_stop_index");
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.send(JSON.stringify({ action: "stop" }));
+
 //switch to toggle is_auto
 toggleAuto.onchange = function () {
   is_auto = !is_auto;

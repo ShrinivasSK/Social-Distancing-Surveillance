@@ -28,6 +28,22 @@ markerInput.disabled = true;
 //default dimensions of marker
 markerInput.value = "7.2";
 
+var body = document.getElementById("body");
+
+body.onload = function () {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/start_stop_calib");
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.send(JSON.stringify({ action: "start" }));
+};
+
+$(window).bind("beforeunload", function () {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/start_stop_calib");
+  xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xhr.send(JSON.stringify({ action: "stop" }));
+});
+
 //enable editing on marker dimensions
 buttonMarkerEdit.onclick = function () {
   markerInput.disabled = false;
@@ -44,7 +60,6 @@ buttonMarkerConfirm.onclick = function () {
   xhr.open("POST", "/marker-dimension");
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify(data));
-  
 };
 
 //enable editing in form
