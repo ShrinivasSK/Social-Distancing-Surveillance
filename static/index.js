@@ -47,6 +47,7 @@ $(window).bind("beforeunload", function () {
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify({ action: "stop" }));
 
+});
 //switch to toggle is_auto
 toggleAuto.onchange = function () {
   is_auto = !is_auto;

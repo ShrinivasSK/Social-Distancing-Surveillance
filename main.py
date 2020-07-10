@@ -4,6 +4,7 @@ import cv2
 import yaml
 import socket
 import io
+from _thread import *
 import threading
 
 app = Flask(__name__)
@@ -13,6 +14,9 @@ is_auto = False
 calib_now = False
 marker_length = 7.2
 calib_start = False
+
+gui_index_on = False
+gui_calib_on = False
 
 
 @app.route('/')
@@ -122,6 +126,14 @@ def get_min_dist():
 def onstart_stop_index():
     json = request.get_json()
     print(json['action'])
+    global  gui_index_on
+    global  gui_calib_on
+    if(json['action'] == 'start'):
+        gui_index_on = True
+        gui_calib_on = False
+        print(gui_index_on)
+    else:
+        gui_index_on = False
     return jsonify(result="done")
 
 
@@ -129,6 +141,13 @@ def onstart_stop_index():
 def onstart_stop_calib():
     json = request.get_json()
     print(json['action'])
+    global gui_calib_on
+    global gui_index_on
+    if (json['action'] == 'start'):
+        gui_calib_on = True
+        gui_index_on = False
+    else:
+        gui_calib_on = False
     return jsonify(result="done")
 
 
@@ -200,7 +219,33 @@ def save_changes():
         yaml.dump(json, file)
     return jsonify(result="normal")
 
+def nonGUICode():
+    global  video_camera
+    if(not (video_camera is None)):
+        if(video_camera.calibrater.calibrationDone):
+            video_camera.is_auto = True
+            video_camera.get_frame()
+            if(video_camera.social_distancing_violated):
+                print("Social Distancing Violated!")
+        else:
+            global calib_start
+            calib_start = True
+            video_camera.get_frame_calib(True)
+            video_camera.getCalibData(marker_length, calib_start)
+    else:
+        video_camera = VideoCamera()
+
+
+def runNonGUI():
+    while True:
+        #print("INDEX")
+        #print(gui_index_on)
+        #print("CALIB")
+        #print(gui_calib_on)
+        if ((not gui_index_on) and (not gui_calib_on)):
+            nonGUICode()
 
 # main server starting
 if __name__ == '__main__':
+    start_new_thread(runNonGUI, ())
     app.run(host='0.0.0.0', debug=False, threaded=True, use_reloader=False)
