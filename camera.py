@@ -29,7 +29,6 @@ class VideoCamera(object):
         self.min_dist = 150  # (cm)
         self.max_dist = 350  # (cm)
 
-
         self.social_distancing_violated = False
 
     def __del__(self):

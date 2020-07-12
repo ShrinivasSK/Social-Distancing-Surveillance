@@ -15,7 +15,9 @@ calib_now = False
 marker_length = 7.2
 calib_start = False
 
+# If index page is active then this variable changes to True
 gui_index_on = False
+# If calibration page is active then this variable changes to True
 gui_calib_on = False
 
 
@@ -243,7 +245,7 @@ def save_changes():
         yaml.dump(json, file)
     return jsonify(result="normal")
 
-
+# non GUI code
 def nonGUICode():
     global video_camera
     if(not (video_camera is None)):
@@ -260,7 +262,7 @@ def nonGUICode():
     else:
         video_camera = VideoCamera()
 
-
+# function that runs the non GUI code if GUI is not active
 def runNonGUI():
     while True:
         # print("INDEX")
@@ -275,3 +277,19 @@ def runNonGUI():
 if __name__ == '__main__':
     start_new_thread(runNonGUI, ())
     app.run(host='0.0.0.0', debug=False, threaded=True, use_reloader=False)
+
+
+############################################################################
+#For RPi Integration
+############################################################################
+# 1) When push button is pressed
+# set video_camera.calibrater.calibrationDone = 0 to start calibration
+#
+# 2) For LED
+# if video_camera.calibrater.calibrationLEDStatus = 0 --> RED LED
+# if video_camera.calibrater.calibrationLEDStatus = 1 --> YELLOW LED
+# if video_camera.calibrater.calibrationLEDStatus = 3 --> GREEN LED
+#
+# 3) For Playing Sound
+# if video_camera.social_distancing_violated = True --> Play sound
+############################################################################

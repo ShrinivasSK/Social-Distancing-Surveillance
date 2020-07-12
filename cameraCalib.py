@@ -27,16 +27,18 @@ class CameraCalibration:
         self.rvecs_Intrinstic = []
         self.tvecs_Intrinstic = []
         self.arucoLength = 0.0  # in cm
-        self.worldRatio = 0.0  # in cm^2
+        self.worldRatio = 0.0  # in cm
         self.topViewTransform = None
         self.calibrationDone = 0
         self.calibData = {}
         self.noOfFrames = 0
         self.prevArucoCorners = []
-        self.arucoFixed = 1 
+        self.arucoFixed = 1
+        self.calibrationLEDStatus = 0
         self.checkIntrinstics()
         self.checkCalibration()
 
+    # function to load previously calculated intrinstics
     def checkIntrinstics(self):
         try:
             with open('intrinsicsData.yaml') as f:
@@ -50,6 +52,7 @@ class CameraCalibration:
             print("Error opening intrinsicsData.yaml")
             self.intrinsticDone = 0
 
+    # function to load previously calculated calibration values
     def checkCalibration(self):
         try:
             with open('calibrationData.yaml') as f:
@@ -73,10 +76,12 @@ class CameraCalibration:
             print("Error opening calibrationData.yaml")
             self.calibrationDone = 0
 
+    # function to detect aruco markers
     def detectMarkers(self, img):
         corners, ids, _ = cv2.aruco.detectMarkers(img, aruco_dict)
         return (corners, ids)
 
+    # function to calculate intrinstics
     def findIntrinstics(self, img):
         if len(self.markerCounterPerFrame_Intrinstic) >= 15:
             self.markerCounterPerFrame_Intrinstic = np.array(
@@ -112,12 +117,14 @@ class CameraCalibration:
                             (self.allIdsConcatenated_Intrinstic, ids))
                     self.markerCounterPerFrame_Intrinstic.append(len(ids))
 
+    # function to re-calculate intrinstics
     def reFindIntrinstics(self, img):
         self.allCornersConcatenated_Intrinstic.clear()
         self.allIdsConcatenated_Intrinstic.clear()
         self.markerCounterPerFrame_Intrinstic.clear()
         self.intrinsticDone = 0
 
+    # function to undistort image
     def undistortInput(self, img):
         if(self.cameraMatrix is None or self.distCoeffs is None):
             print("Intrinstic parameters not found")
@@ -127,6 +134,7 @@ class CameraCalibration:
             frame = cv2.undistort(frame, self.cameraMatrix, self.distCoeffs)
             return frame
 
+    # function to find top view transform using aruco corners
     def findTopViewTransform(self, img):
         sum_arr = []
         for i in range(0, 4):
@@ -159,6 +167,7 @@ class CameraCalibration:
         trform, _ = cv2.findHomography(pts_src, pts_dst)
         self.topViewTransform = trform
 
+    # function to find top view of image
     def findTopView(self, img):
         if(self.topViewTransform is None):
             return None
@@ -168,6 +177,7 @@ class CameraCalibration:
             topView = cv2.warpPerspective(img, self.topViewTransform, size)
             return topView
 
+    # function to find worldRatio using topViewTransform matrix
     def findWorldRatio(self, topView):
         corners, ids = self.detectMarkers(topView)
         if(not(ids is None)):
@@ -196,40 +206,15 @@ class CameraCalibration:
         self.worldRatio = 0.0
         self.calibrate(img, arucoLength)
 
+    # function to update calibration according to camera shift
     def updateCalibration(self, img, homography):
-        #cameraMatrixInverse = np.linalg.inv(self.cameraMatrix)
-        #rvecMat = newRMat
-        #print(homography)
-
-        #newTransform = np.zeros((4, 4))
-        #for i in range(0, 3):
-        #    for j in range(0, 3):
-        #        newTransform[i][j] = rvecMat[i][j]
-        #newTransform[3][3] = 1
-        #newTransform[0][3] = newTvec[0][0]
-        #newTransform[1][3] = newTvec[1][0]
-        #newTransform[2][3] = newTvec[2][0]
 
         for i in range(0, 4):
             arucoCorner = np.zeros((3, 1))
             arucoCorner[0][0] = self.aruco_corners_original[0][0][i][0]
             arucoCorner[1][0] = self.aruco_corners_original[0][0][i][1]
-            #arucoCorner[0][0] = self.aruco_corners[0][0][i][0]
-            #arucoCorner[1][0] = self.aruco_corners[0][0][i][1]
             arucoCorner[2][0] = 1
 
-            #arucoCorner = cameraMatrixInverse.dot(arucoCorner)
-            #arucoCornerInCFrame = np.zeros((4, 1))
-            #arucoCornerInCFrame[0][0] = arucoCorner[0][0]
-            #arucoCornerInCFrame[1][0] = arucoCorner[1][0]
-            #arucoCornerInCFrame[2][0] = arucoCorner[2][0]
-            #arucoCornerInCFrame[3][0] = 1
-
-            #newArucoCornerInCFrame = newTransform.dot(arucoCornerInCFrame)
-
-            #temp = np.array(([1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0]))
-            #newArucoCorner = temp.dot(newArucoCornerInCFrame)
-            #newArucoCorner = self.cameraMatrix.dot(newArucoCorner)
             newArucoCorner = homography.dot(arucoCorner)
             self.aruco_corners[0][0][i][0] = newArucoCorner[0][0]
             self.aruco_corners[0][0][i][1] = newArucoCorner[1][0]
@@ -358,11 +343,14 @@ class CameraCalibration:
             return 0
         return 1
 
+    # function to calibrate camera
     def calibrate(self, img, arucoLength):
         self.arucoLength = arucoLength
         self.aruco_corners, self.aruco_ids = self.detectMarkers(img)
         if(not(self.aruco_ids is None)):
             if(len(self.aruco_ids) > 0):
+
+                self.calibrationLEDStatus = 1
 
                 if(self.noOfFrames == 0):
                     self.prevArucoCorners = []
@@ -387,24 +375,31 @@ class CameraCalibration:
                     if(not (is_stable_1 and is_stable_2)):
                         self.noOfFrames = 0
                         self.arucoFixed = 0
+                        self.calibrationLEDStatus = 0
                     else:
                         self.arucoFixed = 1
+                        self.calibrationLEDStatus = 1
 
                     if(self.noOfFrames >= 5):
                         self.arucoFixed = 1
+                        self.calibrationLEDStatus = 1
                         if(self.calibration(img)):
                             print("Calibration Done")
+                            self.calibrationLEDStatus = 2
                             return 1
                         else:
+                            self.calibrationLEDStatus = 0
                             return 0
 
                 self.noOfFrames = self.noOfFrames + 1
             else:
                 self.calibrationDone = 0
+                self.calibrationLEDStatus = 0
                 # print("ARUCO NOT DETECTED!")
                 return 0
         else:
             self.calibrationDone = 0
+            self.calibrationLEDStatus = 0
             # print("ARUCO NOT DETECTED!")
             return 0
 
