@@ -4,6 +4,7 @@ body {
   background-color: #fff;
   margin: 0;
   box-sizing: border-box;
+  position: relative;
 }
 
 .header {
@@ -17,7 +18,7 @@ body {
 }
 
 .transparent-button {
-  background-color:#586162;
+  background-color: #586162;
   color: white;
   box-shadow: none;
   border: solid 1.2px white;
@@ -202,7 +203,9 @@ button:disabled {
 }
 
 footer {
-  float: bottom;
+  position: absolute;
+  bottom: 0;
+  left: 0;
   text-align: center;
   background-color: rgba(0, 0, 0, 0.8);
   color: #f7f7f7c9;
@@ -444,4 +447,83 @@ To make Page Responsive to different screen sizes */
   .down-icon {
     right: 2%;
   }
+}
+
+/* Login */
+.backdrop {
+  z-index: 1;
+  opacity: 0.7;
+  filter: alpha(opacity=0);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+  position: fixed;
+  opacity: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 19rem;
+  background: #eabd6c;
+  border-radius: 5px;
+  -moz-box-shadow: 0px 0px 5px #444444;
+  -webkit-box-shadow: 0px 0px 5px #444444;
+  box-shadow: 0px 0px 5px #444444;
+}
+
+.box > * {
+  z-index: 3;
+}
+
+.heading-login {
+  width: 100%;
+  background-color: #586162;
+  text-align: center;
+  color: white;
+  margin: 0;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+.icon-login {
+  font-size: 12rem;
+  color: #586162;
+  margin-bottom: 1rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form > label {
+  margin-right: 1rem;
+}
+
+#username,
+#password {
+  width: 9rem;
+  height: 1.5rem;
+  font-size: 1rem;
+  margin-left: 1rem;
+}
+#username {
+  margin-bottom: 0.5rem;
+}
+
+.box > button {
+  margin-bottom: 2rem;
+}
+
+#submission-output{
+  color: red;
+  text-align: center;
 }
