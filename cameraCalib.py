@@ -20,6 +20,7 @@ class CameraCalibration:
         self.aruco_tvecs = []
         self.aruco_ids = []
         self.aruco_corners = [[]]
+        self.aruco_corners_original = [[]]
         self.allCornersConcatenated_Intrinstic = [[]]
         self.allIdsConcatenated_Intrinstic = []
         self.markerCounterPerFrame_Intrinstic = []
@@ -54,6 +55,7 @@ class CameraCalibration:
             with open('calibrationData.yaml') as f:
                 loadedData = yaml.load(f)
             self.aruco_corners = loadedData.get('aruco_corners')
+            self.aruco_corners_original = loadedData.get('aruco_corners_original')
             self.aruco_ids = loadedData.get('aruco_ids')
             self.aruco_rvecs = loadedData.get('aruco_rvecs')
             self.aruco_tvecs = loadedData.get('aruco_tvecs')
@@ -210,8 +212,10 @@ class CameraCalibration:
 
         for i in range(0, 4):
             arucoCorner = np.zeros((3, 1))
-            arucoCorner[0][0] = self.aruco_corners[0][0][i][0]
-            arucoCorner[1][0] = self.aruco_corners[0][0][i][1]
+            arucoCorner[0][0] = self.aruco_corners_original[0][0][i][0]
+            arucoCorner[1][0] = self.aruco_corners_original[0][0][i][1]
+            #arucoCorner[0][0] = self.aruco_corners[0][0][i][0]
+            #arucoCorner[1][0] = self.aruco_corners[0][0][i][1]
             arucoCorner[2][0] = 1
 
             #arucoCorner = cameraMatrixInverse.dot(arucoCorner)
@@ -284,6 +288,7 @@ class CameraCalibration:
 
         calibrationData = {
             'aruco_corners': np.asarray(self.aruco_corners).tolist(),
+            'aruco_corners_original': np.asarray(self.aruco_corners_original).tolist(),
             'aruco_ids': np.asarray(self.aruco_ids).tolist(),
             'aruco_rvecs': np.asarray(self.aruco_rvecs).tolist(),
             'aruco_tvecs': np.asarray(self.aruco_tvecs).tolist(),
@@ -308,6 +313,7 @@ class CameraCalibration:
         self.aruco_rvecs, self.aruco_tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, 0.05,
                                                                                     self.cameraMatrix,
                                                                                     self.distCoeffs)
+        self.aruco_corners_original = self.aruco_corners
         self.findTopViewTransform(img)
         topView = self.findTopView(img)
         self.findWorldRatio(topView)
@@ -329,6 +335,7 @@ class CameraCalibration:
 
         calibrationData = {
             'aruco_corners': np.asarray(self.aruco_corners).tolist(),
+            'aruco_corners_original': np.asarray(self.aruco_corners_original).tolist(),
             'aruco_ids': np.asarray(self.aruco_ids).tolist(),
             'aruco_rvecs': np.asarray(self.aruco_rvecs).tolist(),
             'aruco_tvecs': np.asarray(self.aruco_tvecs).tolist(),
@@ -383,7 +390,7 @@ class CameraCalibration:
                     else:
                         self.arucoFixed = 1
 
-                    if(self.noOfFrames >= 15):
+                    if(self.noOfFrames >= 5):
                         self.arucoFixed = 1
                         if(self.calibration(img)):
                             print("Calibration Done")

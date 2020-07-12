@@ -81,10 +81,12 @@ class VideoCamera(object):
                 elif(self.findWorldDistance(point1, point2) > self.max_dist):
                     continue
                 elif(self.findWorldDistance(point1, point2) < self.min_dist):
+                    print(self.findWorldDistance(point1, point2))
                     counter = counter + 1
                     cv2.line(self.frame, point1, point2,
                              (0, 0, 255), thickness=3, lineType=8)
                     continue
+                print(self.findWorldDistance(point1, point2))
                 cv2.line(self.frame, point1, point2,
                          (0, 255, 0), thickness=3, lineType=8)
 
