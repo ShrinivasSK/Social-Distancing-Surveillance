@@ -11,7 +11,7 @@
     />
 
     <!-- to work without server -->
-    <!-- <link rel="stylesheet" type="text/css" href="../static/calibrate.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/calibrate.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
@@ -68,7 +68,6 @@
       </div> -->
       <h1 class="heading_main">Calibration</h1>
     </header>
-    <div class="footer"></div>
     <div class="complete-screen">
       <div class="mainPage">
         <div class="marker-form-container">
@@ -94,8 +93,9 @@
                 class="feed"
                 id="feed-cam"
                 src="{{ url_for('video_feed_calib') }}"
+                style="width: 100%;"
               />
-
+              <img src="./img.jpg" alt="" style="width: 100%;" />
               <div class="start-button">
                 <button id="start-calib">Start Calibration</button>
                 <i class="fas fa-check-circle" id="calib-tick"></i>
@@ -106,7 +106,6 @@
           <!-- Form -->
           <div class="form-container" id="form-container">
             <h3>Calcluated Pose of the Camera</h3>
-            <div class="footer"></div>
             <form class="form" id="form">
               <div class="flexbox">
                 <div class="form-section">
@@ -130,7 +129,7 @@
                     </tr>
                   </table>
                 </div>
-                
+
                 <div class="form-section">
                   <h4 class="form-section-text">Orientation of the Camera:</h4>
                   <table>
@@ -170,6 +169,7 @@
         </div>
       </div>
     </div>
+    <div class="footer"></div>
   </body>
 
   <script
