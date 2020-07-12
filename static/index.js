@@ -19,14 +19,40 @@ var toggleAuto = document.getElementById("toggle-auto");
 
 var minDistForm = document.getElementById("min-dist");
 
+var loginForm = document.getElementById("login-form");
+var buttonLogin = document.getElementById("button-login");
+var backdrop = document.getElementById("backdrop");
+var box = document.getElementById("box");
+var errorOutput = document.getElementById("submission-output");
+
+globalusername = "admin";
+globalpassword = "admin";
+minDistThresh = "2";
+
+buttonLogin.onclick = function () {
+  var username = loginForm.elements[0].value;
+  var password = loginForm.elements[1].value;
+  if (username != globalusername) {
+    errorOutput.innerHTML = "Enter correct username";
+  } else if (password != globalpassword) {
+    errorOutput.innerHTML = "Enter correct password";
+  } else {
+    backdrop.style.display = "none";
+    box.style.display = "none";
+    mainScreen.hidden = false;
+    noFeed.hidden = true;
+  }
+};
+
 //disable editing in the min-distance threshold input
 minDistForm.elements[0].disabled = true;
 //default min physical distance in meter
-minDistForm.elements[0].value = "1";
+minDistForm.elements[0].value = minDistThresh;
 
 //streaming controls
 buttonStreamPlay.disabled = true;
-noFeed.hidden = true;
+mainScreen.hidden = true;
+noFeed.hidden = false;
 
 //variable to check whether auto recalibration is on or off
 toggleAuto.checked = true;
@@ -39,6 +65,16 @@ body.onload = function () {
   xhr.open("POST", "/start_stop_index");
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify({ action: "start" }));
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      //show the received response in the form
+      data = JSON.parse(xhr.response);
+      globalpassword = data["username"];
+      globalusername = data["password"];
+      minDistThresh = data["thresh"];
+      minDistForm.elements[0].value = minDistThresh / 100;
+    }
+  };
 };
 
 $(window).bind("beforeunload", function () {
@@ -46,7 +82,6 @@ $(window).bind("beforeunload", function () {
   xhr.open("POST", "/start_stop_index");
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify({ action: "stop" }));
-
 });
 //switch to toggle is_auto
 toggleAuto.onchange = function () {

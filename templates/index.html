@@ -3,26 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
+    <!-- <link
       rel="stylesheet"
       href="{{ url_for('static',filename='index.css') }}"
     />
     <link
       rel="stylesheet"
       href="{{ url_for('static',filename='toggle-switch.css') }}"
-    />
+    /> -->
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
     <!-- to work without server -->
-    <!-- <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
-    <link rel="stylesheet" type="text/css" href="../static/index.css" /> -->
+    <link rel="stylesheet" type="text/css" href="../static/toggle-switch.css" />
+    <link rel="stylesheet" type="text/css" href="../static/index.css" />
     <title>Social Distancing Surveillance</title>
-    <!-- <link
+    <link
       href="https://fonts.googleapis.com/css2?family=Lato&display=swap"
       rel="stylesheet"
-    /> -->
+    />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
     <script>
@@ -36,9 +36,53 @@
           );
         });
       });
+      jQuery(document).ready(function () {
+        /* Open lightbox on button click */
+        // $(".lightbox-toggle").click(function () {
+        //   $(".backdrop")
+        //     .animate({ opacity: ".50" }, 300, "linear")
+        //     .css("display", "block");
+        //   $(".box").fadeIn();
+        // });
+        /* Click to close lightbox */
+        // $(".close, .backdrop").click(function () {
+        //   $(".backdrop").animate({ opacity: "0" }, 300, "linear", function () {
+        //     $(".backdrop").css("display", "none");
+        //   });
+        //   $(".box").fadeOut();
+        // });
+      });
     </script>
   </head>
   <body id="body">
+    <div class="backdrop" id="backdrop"></div>
+
+    <div class="box" id="box">
+      <h2 class="heading-login">Login</h2>
+      <i class="material-icons icon-login">account_circle</i>
+      <form class="login-form" id="login-form" method="POST">
+        <table>
+          <tr>
+            <td>
+              <label for="username">Username</label>
+            </td>
+            <td>
+              <input type="text" id="username" name="username" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="password">Password</label>
+            </td>
+            <td>
+              <input type="password" id="password" name="password" />
+            </td>
+          </tr>
+        </table>
+        <p id="submission-output"></p>
+      </form>
+      <button type="submit" id="button-login">Submit</button>
+    </div>
     <header class="header">
       <button class="transparent-button" id="click">
         First Time Here?
@@ -144,10 +188,10 @@
       <a href="/credits-screen">Team Credits</a>
     </footer>
   </body>
-  <script
+  <!-- <script
     type="text/javascript"
     src="{{ url_for('static', filename='index.js') }}"
-  ></script>
+  ></script> -->
   <!-- to work without server -->
-  <!-- <script type="text/javascript" src="../static/index.js"></script> -->
+  <script type="text/javascript" src="../static/index.js"></script>
 </html>

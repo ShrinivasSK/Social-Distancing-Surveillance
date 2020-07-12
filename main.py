@@ -113,10 +113,8 @@ def video_feed_calib():
 
 @app.route('/min-dist', methods=['POST'])
 def get_min_dist():
-    print(video_camera.min_dist)
     json = request.get_json()
     video_camera.min_dist = float(json['min-dist'])*100
-    print(video_camera.min_dist)
     with open('min_dist.txt', 'w') as file:
         file.write(str(video_camera.min_dist))
     return jsonify(result="done")
@@ -126,15 +124,30 @@ def get_min_dist():
 def onstart_stop_index():
     json = request.get_json()
     print(json['action'])
-    global  gui_index_on
-    global  gui_calib_on
+    global gui_index_on
+    global gui_calib_on
     if(json['action'] == 'start'):
         gui_index_on = True
         gui_calib_on = False
         print(gui_index_on)
+        try:
+            with open('loginDetails.yaml') as f:
+                loadedData = yaml.safe_load(f)
+            username = loadedData.get('username')
+            password = loadedData.get('password')
+            data = {
+                "username": str(username),
+                "password": str(password),
+                "thresh": str(video_camera.min_dist),
+            }
+            return jsonify(data)
+        except:
+            print("Couldn't open login yaml file")
+            return jsonify(result="error")
+
     else:
         gui_index_on = False
-    return jsonify(result="done")
+        return jsonify(result="done")
 
 
 @app.route('/start_stop_calib', methods=['POST'])
@@ -146,12 +159,23 @@ def onstart_stop_calib():
     if (json['action'] == 'start'):
         gui_calib_on = True
         gui_index_on = False
+        try:
+            with open('calibrationData.yaml') as f:
+                loadedData = yaml.safe_load(f)
+            aruco_length = loadedData.get('aruco_length')
+            data = {
+                "markerDimension": str(aruco_length),
+            }
+            return jsonify(data)
+        except:
+            print("Couldn't open login yaml file")
+            return jsonify(result="error")
     else:
         gui_calib_on = False
-    return jsonify(result="done")
+        return jsonify(result="done")
 
 
-@app.route('/recalib', methods=['POST'])
+@ app.route('/recalib', methods=['POST'])
 # Handle recalibration calls
 def recalib():
     json = request.get_json()
@@ -186,7 +210,7 @@ def recalib():
         return jsonify(result="done")
 
 
-@app.route('/marker-dimension', methods=['POST'])
+@ app.route('/marker-dimension', methods=['POST'])
 # Get the data about marker dimensions and store in global variable
 def getDimension():
     global marker_length
@@ -195,7 +219,7 @@ def getDimension():
     return jsonify(result="done")
 
 
-@app.route('/calib-start', methods=['POST'])
+@ app.route('/calib-start', methods=['POST'])
 # Handle Calibration start calls from Calibration page
 def startCalib():
     global calib_start
@@ -209,7 +233,7 @@ def startCalib():
     return jsonify(video_camera.calibrater.calibData)
 
 
-@app.route('/save-changes', methods=['POST'])
+@ app.route('/save-changes', methods=['POST'])
 # When user confirms the data output from calibration
 def save_changes():
     json = request.get_json()
@@ -219,8 +243,9 @@ def save_changes():
         yaml.dump(json, file)
     return jsonify(result="normal")
 
+
 def nonGUICode():
-    global  video_camera
+    global video_camera
     if(not (video_camera is None)):
         if(video_camera.calibrater.calibrationDone):
             video_camera.is_auto = True
@@ -228,8 +253,8 @@ def nonGUICode():
             if(video_camera.social_distancing_violated):
                 print("Social Distancing Violated!")
         else:
-            #global calib_start
-            #calib_start = True
+            global calib_start
+            # calib_start = True
             video_camera.get_frame_calib(True)
             video_camera.getCalibData(marker_length, True)
     else:
@@ -238,12 +263,13 @@ def nonGUICode():
 
 def runNonGUI():
     while True:
-        #print("INDEX")
-        #print(gui_index_on)
-        #print("CALIB")
-        #print(gui_calib_on)
+        # print("INDEX")
+        # print(gui_index_on)
+        # print("CALIB")
+        # print(gui_calib_on)
         if ((not gui_index_on) and (not gui_calib_on)):
             nonGUICode()
+
 
 # main server starting
 if __name__ == '__main__':

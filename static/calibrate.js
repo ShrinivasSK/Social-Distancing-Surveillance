@@ -25,8 +25,9 @@ form.elements[3].disabled = true;
 form.elements[4].disabled = true;
 
 markerInput.disabled = true;
+var markerdimension="7.2";
 //default dimensions of marker
-markerInput.value = "7.2";
+markerInput.value = markerdimension;
 
 var body = document.getElementById("body");
 
@@ -35,6 +36,14 @@ body.onload = function () {
   xhr.open("POST", "/start_stop_calib");
   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
   xhr.send(JSON.stringify({ action: "start" }));
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      //show the received response in the form
+      data = JSON.parse(xhr.response);
+      var markerdimension = data["markerDimension"];
+      markerInput.value = markerdimension;
+    }
+  };
 };
 
 $(window).bind("beforeunload", function () {
