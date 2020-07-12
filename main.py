@@ -228,10 +228,10 @@ def nonGUICode():
             if(video_camera.social_distancing_violated):
                 print("Social Distancing Violated!")
         else:
-            global calib_start
-            calib_start = True
+            #global calib_start
+            #calib_start = True
             video_camera.get_frame_calib(True)
-            video_camera.getCalibData(marker_length, calib_start)
+            video_camera.getCalibData(marker_length, True)
     else:
         video_camera = VideoCamera()
 
