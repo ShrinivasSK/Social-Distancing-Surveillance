@@ -288,7 +288,7 @@ if __name__ == '__main__':
 # 2) For LED
 # if video_camera.calibrater.calibrationLEDStatus = 0 --> RED LED
 # if video_camera.calibrater.calibrationLEDStatus = 1 --> YELLOW LED
-# if video_camera.calibrater.calibrationLEDStatus = 3 --> GREEN LED
+# if video_camera.calibrater.calibrationLEDStatus = 2 --> GREEN LED
 #
 # 3) For Playing Sound
 # if video_camera.social_distancing_violated = True --> Play sound
