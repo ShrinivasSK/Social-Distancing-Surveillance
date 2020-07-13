@@ -354,6 +354,11 @@ To make Page Responsive to different screen sizes */
     height: 40vh;
   }
 
+  .logout {
+    top: 1.8rem;
+    font-size: 1rem;
+  }
+
   .text_part {
     padding: 1rem 1rem;
   }
@@ -473,6 +478,7 @@ To make Page Responsive to different screen sizes */
   left: 50%;
   transform: translate(-50%, -50%);
   width: 19rem;
+  padding-bottom: 2rem;
   background: #eabd6c;
   border-radius: 5px;
   -moz-box-shadow: 0px 0px 5px #444444;
@@ -494,7 +500,7 @@ To make Page Responsive to different screen sizes */
   margin-bottom: 1rem;
 }
 .icon-login {
-  font-size: 12rem;
+  font-size: 12rem !important;
   color: #586162;
   margin-bottom: 1rem;
 }
@@ -515,15 +521,22 @@ To make Page Responsive to different screen sizes */
   font-size: 1rem;
   margin-left: 1rem;
 }
-#username {
+#username,
+#oldpass {
   margin-bottom: 0.5rem;
 }
 
-.box > button {
-  margin-bottom: 2rem;
-}
 
-#submission-output{
+.box > p {
+  text-align: center;
   color: red;
   text-align: center;
+  margin: 1rem 1rem;
+}
+
+.passchange-link{
+  margin: 0;
+  margin-top: 1rem;
+  color: #586162;
+  cursor: pointer;
 }

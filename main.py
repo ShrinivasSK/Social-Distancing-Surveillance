@@ -4,6 +4,7 @@ import cv2
 import yaml
 import socket
 import io
+import datetime
 from _thread import *
 import threading
 
@@ -14,6 +15,8 @@ is_auto = False
 calib_now = False
 marker_length = 7.2
 calib_start = False
+isloggedIn = False
+loggingTime = None
 
 # If index page is active then this variable changes to True
 gui_index_on = False
@@ -125,9 +128,10 @@ def get_min_dist():
 @app.route('/start_stop_index', methods=['POST'])
 def onstart_stop_index():
     json = request.get_json()
-    print(json['action'])
+    # print(json['action'])
     global gui_index_on
     global gui_calib_on
+    global isloggedIn
     if(json['action'] == 'start'):
         gui_index_on = True
         gui_calib_on = False
@@ -137,9 +141,12 @@ def onstart_stop_index():
                 loadedData = yaml.safe_load(f)
             username = loadedData.get('username')
             password = loadedData.get('password')
+            key = loadedData.get('key')
             data = {
                 "username": str(username),
                 "password": str(password),
+                "key": str(key),
+                "islogin": str(isloggedIn),
                 "thresh": str(video_camera.min_dist),
             }
             return jsonify(data)
@@ -150,6 +157,37 @@ def onstart_stop_index():
     else:
         gui_index_on = False
         return jsonify(result="done")
+
+
+@app.route('/change-pass', methods=['POST'])
+def on_pass_change():
+    json = request.get_json()
+    try:
+        with open('loginDetails.yaml') as f:
+            loadedData = yaml.safe_load(f)
+        username = loadedData.get('username')
+        password = json['password']
+        key = loadedData.get('key')
+        data = {
+            "username": str(username),
+            "password": str(password),
+            "key": str(key),
+        }
+        with open(r'loginDetails.yaml', 'w') as file:
+            yaml.dump(data, file)
+        return jsonify(result="done")
+    except:
+        print("Couldn't open login yaml file")
+        return jsonify(result="error")
+
+
+@app.route('/logged-in', methods=['POST'])
+def logged_in():
+    global isloggedIn
+    global loggingTime
+    isloggedIn = True
+    loggingTime = datetime.datetime.now()
+    return jsonify(result="done")
 
 
 @app.route('/start_stop_calib', methods=['POST'])
@@ -246,6 +284,8 @@ def save_changes():
     return jsonify(result="normal")
 
 # non GUI code
+
+
 def nonGUICode():
     global video_camera
     if(not (video_camera is None)):
@@ -263,12 +303,19 @@ def nonGUICode():
         video_camera = VideoCamera()
 
 # function that runs the non GUI code if GUI is not active
+
+
 def runNonGUI():
+    global loggingTime
+    global isloggedIn
     while True:
         # print("INDEX")
         # print(gui_index_on)
         # print("CALIB")
         # print(gui_calib_on)
+        if(loggingTime != None and datetime.datetime.now().minute-loggingTime.minute > 15):
+            isloggedIn = False
+            loggingTime = None
         if ((not gui_index_on) and (not gui_calib_on)):
             nonGUICode()
 
@@ -280,7 +327,7 @@ if __name__ == '__main__':
 
 
 ############################################################################
-#For RPi Integration
+# For RPi Integration
 ############################################################################
 # 1) When push button is pressed
 # set video_camera.calibrater.calibrationDone = 0 to start calibration
