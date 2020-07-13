@@ -47,16 +47,18 @@ class Detector():
 				class_name=lambda x: (
 					x['class_id'].astype(int).astype(str).replace(CLASS_NAMES)),)
 
+			df['label'] = (df['class_name'] + ': ' +
+					   df['confidence'].astype(str).str.slice(stop=4))
+			df = df[df['confidence'] > conf_th]
+			if len(conf_class) > 0:
+				df = df[df['class_id'].isin(conf_class)]
+			df = df[df['class_name'] == 'person']
+			return df
+
 		except:
 			print("NAN value")
 
-		df['label'] = (df['class_name'] + ': ' +
-					   df['confidence'].astype(str).str.slice(stop=4))
-		df = df[df['confidence'] > conf_th]
-		if len(conf_class) > 0:
-			df = df[df['class_id'].isin(conf_class)]
-		df = df[df['class_name'] == 'person']
-		return df
+		
 
 	def draw_boxes(self, image, df):
 		for _, box in df.iterrows():
