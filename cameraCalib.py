@@ -219,7 +219,7 @@ class CameraCalibration:
             self.aruco_corners[0][0][i][0] = newArucoCorner[0][0]
             self.aruco_corners[0][0][i][1] = newArucoCorner[1][0]
 
-        self.aruco_rvecs, self.aruco_tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, 0.05,
+        self.aruco_rvecs, self.aruco_tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, self.arucoLength/100,
                                                                                     self.cameraMatrix,
                                                                                     self.distCoeffs)
         self.findTopViewTransform(img)
@@ -295,7 +295,7 @@ class CameraCalibration:
         return 1
 
     def calibration(self, img):
-        self.aruco_rvecs, self.aruco_tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, 0.05,
+        self.aruco_rvecs, self.aruco_tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, self.arucoLength/100,
                                                                                     self.cameraMatrix,
                                                                                     self.distCoeffs)
         self.aruco_corners_original = self.aruco_corners
@@ -370,8 +370,8 @@ class CameraCalibration:
                     diffInPosition = currentArucoCorners - self.prevArucoCorners
                     # print(diffInPosition)
 
-                    is_stable_1 = np.all((diffInPosition <= 2))
-                    is_stable_2 = np.all((diffInPosition >= -2))
+                    is_stable_1 = np.all((diffInPosition <= 5))
+                    is_stable_2 = np.all((diffInPosition >= -5))
                     if(not (is_stable_1 and is_stable_2)):
                         self.noOfFrames = 0
                         self.arucoFixed = 0
