@@ -64,7 +64,7 @@ class Detector():
 		for _, box in df.iterrows():
 			x_min, y_min, x_max, y_max = box['x1'], box['y1'], box['x2'], box['y2']
 			color = (0, 0, 0)
-			cv2.rectangle(image, (x_min, y_min), (x_max, y_max), color, 2)
+			cv2.rectangle(image, (int(x_min), int(y_min)), (int(x_max), int(y_max)), color, 2)
 		return image
 
 	def mid_point(self, image, df):

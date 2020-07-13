@@ -20,14 +20,45 @@ var toggleAuto = document.getElementById("toggle-auto");
 var minDistForm = document.getElementById("min-dist");
 
 var loginForm = document.getElementById("login-form");
+var PassChangeForm = document.getElementById("passchange-form");
 var buttonLogin = document.getElementById("button-login");
 var backdrop = document.getElementById("backdrop");
 var box = document.getElementById("box");
+var boxChangePass = document.getElementById("box-changepass");
 var errorOutput = document.getElementById("submission-output");
+var PassChangeError = document.getElementById("passchange-error");
+var buttonPassChange = document.getElementById("button-passchange");
+var PassChangeLink = document.getElementById("passchange-link");
 
 globalusername = "admin";
 globalpassword = "admin";
+globalKey = "";
 minDistThresh = "2";
+isloggedIn = false;
+
+boxChangePass.style.display = "none";
+box.style.display = "flex";
+
+buttonPassChange.onclick = function () {
+  var PassKey = PassChangeForm.elements[0].value;
+  var newPass = PassChangeForm.elements[1].value;
+  if (PassKey != globalKey) {
+    PassChangeError.innerHTML =
+      "Password Key is wrong. If you dont remember the password key call our Company";
+  } else {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/change-pass");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({ password: newPass }));
+    boxChangePass.style.display = "none";
+    box.style.display = "flex";
+  }
+};
+
+PassChangeLink.onclick = function () {
+  boxChangePass.style.display = "flex";
+  box.style.display = "none";
+};
 
 buttonLogin.onclick = function () {
   var username = loginForm.elements[0].value;
@@ -37,6 +68,10 @@ buttonLogin.onclick = function () {
   } else if (password != globalpassword) {
     errorOutput.innerHTML = "Enter correct password";
   } else {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/logged-in");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify({ action: "done"  }));
     backdrop.style.display = "none";
     box.style.display = "none";
     mainScreen.hidden = false;
@@ -72,7 +107,15 @@ body.onload = function () {
       globalpassword = data["username"];
       globalusername = data["password"];
       minDistThresh = data["thresh"];
+      globalKey = data["key"];
+      isloggedIn = data["islogin"];
       minDistForm.elements[0].value = minDistThresh / 100;
+      if (isloggedIn=="True") {
+        backdrop.style.display = "none";
+        box.style.display = "none";
+        mainScreen.hidden = false;
+        noFeed.hidden = true;
+      }
     }
   };
 };
