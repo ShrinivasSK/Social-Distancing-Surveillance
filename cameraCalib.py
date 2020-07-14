@@ -264,7 +264,6 @@ class CameraCalibration:
         ##########################################################################
         # find camera Pose and save in yaml file
         self.calibData = {'height': str(np.asarray(np.abs(cameraPosition[2]) * 100).tolist()[0][0]),
-                          'distance': str(np.asarray(np.abs(cameraPosition[1]) * 100).tolist()[0][0]),
                           'yaw': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
                           'pitch': str(np.asarray((self.aruco_rvecs[0][0][1] * 180) / np.pi).tolist()),
                           'roll': str(np.asarray((self.aruco_rvecs[0][0][0] * 180) / np.pi).tolist())}
@@ -309,7 +308,6 @@ class CameraCalibration:
         ##########################################################################
         # find camera Pose and send it to HTML page
         self.calibData = {'height': str(np.asarray(np.abs(cameraPosition[2]) * 100).tolist()[0][0]),
-                          'distance': str(np.asarray(np.abs(cameraPosition[1]) * 100).tolist()[0][0]),
                           'yaw': str(np.asarray((self.aruco_rvecs[0][0][2] * 180) / np.pi).tolist()),
                           'pitch': str(np.asarray((self.aruco_rvecs[0][0][1] * 180) / np.pi).tolist()),
                           'roll': str(np.asarray((self.aruco_rvecs[0][0][0] * 180) / np.pi).tolist())}

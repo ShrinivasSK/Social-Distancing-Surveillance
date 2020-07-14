@@ -22,7 +22,6 @@ form.elements[0].disabled = true;
 form.elements[1].disabled = true;
 form.elements[2].disabled = true;
 form.elements[3].disabled = true;
-form.elements[4].disabled = true;
 
 markerInput.disabled = true;
 var markerdimension="7.2";
@@ -77,17 +76,15 @@ buttonPoseEdit.onclick = function () {
   form.elements[1].disabled = false;
   form.elements[2].disabled = false;
   form.elements[3].disabled = false;
-  form.elements[4].disabled = false;
 };
 
 //send data to server where it is saved as yaml file
 buttonPoseSubmit.onclick = function () {
   var data = {
     height: form.elements[0].value,
-    distance: form.elements[1].value,
-    yaw: form.elements[2].value,
-    pitch: form.elements[3].value,
-    roll: form.elements[4].value,
+    yaw: form.elements[1].value,
+    pitch: form.elements[2].value,
+    roll: form.elements[3].value,
   };
 
   const xhr = new XMLHttpRequest();
@@ -108,10 +105,9 @@ buttonCalibStart.onclick = function () {
       //show the received response in the form
       data = JSON.parse(xhr.response);
       form.elements[0].value = data["height"];
-      form.elements[1].value = data["distance"];
-      form.elements[2].value = data["yaw"];
-      form.elements[3].value = data["pitch"];
-      form.elements[4].value = data["roll"];
+      form.elements[1].value = data["yaw"];
+      form.elements[2].value = data["pitch"];
+      form.elements[3].value = data["roll"];
 
       //make the tick visible after finishing
       iconCalibTick.style.display = "block";

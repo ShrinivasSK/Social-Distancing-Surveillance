@@ -29,6 +29,7 @@ var errorOutput = document.getElementById("submission-output");
 var PassChangeError = document.getElementById("passchange-error");
 var buttonPassChange = document.getElementById("button-passchange");
 var PassChangeLink = document.getElementById("passchange-link");
+var LoginLink = document.getElementById("login-link");
 
 globalusername = "admin";
 globalpassword = "admin";
@@ -58,6 +59,11 @@ buttonPassChange.onclick = function () {
 PassChangeLink.onclick = function () {
   boxChangePass.style.display = "flex";
   box.style.display = "none";
+};
+
+LoginLink.onclick = function () {
+  boxChangePass.style.display = "none";
+  box.style.display = "flex";
 };
 
 buttonLogin.onclick = function () {
@@ -90,7 +96,7 @@ mainScreen.hidden = true;
 noFeed.hidden = false;
 
 //variable to check whether auto recalibration is on or off
-toggleAuto.checked = true;
+toggleAuto.checked = false;
 var is_auto = toggleAuto.checked;
 
 var body = document.getElementById("body");

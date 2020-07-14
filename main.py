@@ -139,6 +139,8 @@ def onstart_stop_index():
         try:
             with open('loginDetails.yaml') as f:
                 loadedData = yaml.safe_load(f)
+            with open('min_dist.txt', 'r') as file:
+                video_camera.min_dist = float(file.read())
             username = loadedData.get('username')
             password = loadedData.get('password')
             key = loadedData.get('key')
