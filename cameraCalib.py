@@ -156,15 +156,13 @@ class CameraCalibration:
         bottom_left_index = (
             top_left_index + 3) if ((top_left_index + 3) < 4) else (top_left_index + 3 - 4)
 
-        pts_src = []
-        pts_src.extend([self.aruco_corners[0][0][top_left_index], self.aruco_corners[0][0][top_right_index],
-                        self.aruco_corners[0][0][bottom_right_index], self.aruco_corners[0][0][bottom_left_index]])
+        pts_src = np.array((self.aruco_corners[0][0][top_left_index], self.aruco_corners[0][0][top_right_index], self.aruco_corners[0][0][bottom_right_index], self.aruco_corners[0][0][bottom_left_index]), dtype="float32")
 
-        pts_dst = [(450, 550), (500, 550), (500, 600), (450, 600)]
+        pts_dst = np.array(
+            [[450, 550], [500, 550], [500, 600], [450, 600]],
+            dtype="float32")
 
-        pts_src = np.array(pts_src)
-        pts_dst = np.array(pts_dst)
-        trform, _ = cv2.findHomography(pts_src, pts_dst)
+        trform = cv2.getPerspectiveTransform(pts_src, pts_dst)
         self.topViewTransform = trform
 
     # function to find top view of image
