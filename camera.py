@@ -48,8 +48,8 @@ class VideoCamera(object):
 
         cornerInTopView = self.calibrater.topViewTransform.dot(temp)
         corner1 = np.zeros((2, 1))
-        corner1[0][0] = cornerInTopView[0][0]
-        corner1[1][0] = cornerInTopView[1][0]
+        corner1[0][0] = cornerInTopView[0][0] / cornerInTopView[2][0]
+        corner1[1][0] = cornerInTopView[1][0] / cornerInTopView[2][0]
 
         temp = np.zeros((3, 1))
         temp[0][0] = point2[0][0]
@@ -58,8 +58,8 @@ class VideoCamera(object):
 
         cornerInTopView = self.calibrater.topViewTransform.dot(temp)
         corner2 = np.zeros((2, 1))
-        corner2[0][0] = cornerInTopView[0][0]
-        corner2[1][0] = cornerInTopView[1][0]
+        corner2[0][0] = cornerInTopView[0][0] / cornerInTopView[2][0]
+        corner2[1][0] = cornerInTopView[1][0] / cornerInTopView[2][0]
 
         if (self.calibrater.worldRatio):
             pixelDistance = np.sqrt(
@@ -80,14 +80,16 @@ class VideoCamera(object):
                 elif(self.findWorldDistance(point1, point2) > self.max_dist):
                     continue
                 elif(self.findWorldDistance(point1, point2) < self.min_dist):
-                    print(self.findWorldDistance(point1, point2))
                     counter = counter + 1
                     cv2.line(self.frame, point1, point2,
                              (0, 0, 255), thickness=3, lineType=8)
+                    cv2.putText(self.frame, "{:.2f}".format(self.findWorldDistance(point1, point2)), point1,
+                                cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
                     continue
-                print(self.findWorldDistance(point1, point2))
                 cv2.line(self.frame, point1, point2,
                          (0, 255, 0), thickness=3, lineType=8)
+                cv2.putText(self.frame, "{:.2f}".format(self.findWorldDistance(point1, point2)), point1,
+                            cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 0), 3)
 
         if(counter == 0):
             self.social_distancing_violated = False
