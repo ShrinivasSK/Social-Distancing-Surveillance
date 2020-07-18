@@ -12,6 +12,7 @@ global_frame = None
 class VideoCamera(object):
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
+        self.cap.set(cv2.CAP_PROP_FPS, 3)
         self.frame = self.cap.read()
         # initalise the functional objects
         self.poseRecover = recoverPose(np.identity(3))
@@ -124,6 +125,7 @@ class VideoCamera(object):
     # ReCalibration logic controlled here
     def get_frame(self):
         ret, self.frame = self.cap.read()
+        self.frame=cv2.resize(self.frame,(250,250))
         output = self.detector.prediction(self.frame)
         df = self.detector.filter_prediction(output, self.frame)
         self.frame = self.detector.draw_boxes(self.frame, df)
@@ -165,33 +167,37 @@ class VideoCamera(object):
         ret, self.frame = self.cap.read()
         self.calibFrame = np.copy(self.frame)
 
-
         if(start_calib):
             if(not self.calibrater.calibrationDone):
                 if (self.calibrater.aruco_ids is None):
                     self.calibrater.noOfFrames = 0
                     self.calibrater.prevArucoCorners = []
-                    textsize = cv2.getTextSize("MARKER NOT FOUND!", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                    textsize = cv2.getTextSize(
+                        "MARKER NOT FOUND!", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
                     cv2.putText(self.frame, "MARKER NOT FOUND!", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
                                 (0, 0, 255), 4)
                 else:
                     if (len(self.calibrater.aruco_ids) == 0):
                         self.calibrater.noOfFrames = 0
                         self.calibrater.prevArucoCorners = []
-                        textsize = cv2.getTextSize("MARKER NOT FOUND!", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                        textsize = cv2.getTextSize(
+                            "MARKER NOT FOUND!", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
                         cv2.putText(self.frame, "MARKER NOT FOUND!", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
                                     (0, 0, 255), 4)
                     else:
                         if(not self.calibrater.arucoFixed):
-                            textsize = cv2.getTextSize("MARKER POSITION NOT FIXED", cv2.FONT_HERSHEY_PLAIN, 2, 3)[0]
+                            textsize = cv2.getTextSize(
+                                "MARKER POSITION NOT FIXED", cv2.FONT_HERSHEY_PLAIN, 2, 3)[0]
                             cv2.putText(self.frame, "MARKER POSITION NOT FIXED", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 2,
                                         (0, 0, 255), 3)
                         else:
-                            textsize = cv2.getTextSize("WAIT CALIBRATING", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                            textsize = cv2.getTextSize(
+                                "WAIT CALIBRATING", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
                             cv2.putText(self.frame, "WAIT CALIBRATING", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
                                         (0, 255, 255), 4)
             else:
-                textsize = cv2.getTextSize("CALIBRATION COMPLETE", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
+                textsize = cv2.getTextSize(
+                    "CALIBRATION COMPLETE", cv2.FONT_HERSHEY_PLAIN, 3, 4)[0]
                 cv2.putText(self.frame, "CALIBRATION COMPLETE", (int((self.frame.shape[1] - textsize[0]) / 2), int((self.frame.shape[0] + textsize[1]) / 2)), cv2.FONT_HERSHEY_PLAIN, 3,
                             (0, 255, 0), 4)
 
