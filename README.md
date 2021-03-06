@@ -4,7 +4,8 @@ UI for the Social Distancing Surveilance system developed by AGV, IIT Kharagpur
 ## Dependencies
 - Flask
 - PyYaml
-- Opencv
+- Opencv with Contrib Modules
+- Pandas
 
 ## How To Run
 - Install Flask
