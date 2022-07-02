@@ -1,4 +1,4 @@
-# SocialDistancingUI
+#  Social Distancing Surveilance
 UI for the Social Distancing Surveilance system developed by AGV, IIT Kharagpur
 
 ## Dependencies
